@@ -1,5 +1,6 @@
 package tomato.physics;
 
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -75,4 +76,11 @@ public class WorldPhysicHandler {
 		return false;
 
 	}
+
+	public static boolean isPixelCollide(BufferedImage image1, Point pos1,
+			BufferedImage image2, Point pos2, int alphaLimit) {
+		return isPixelCollide(image1, pos1.x, pos1.y, image2, pos2.x, pos2.x,
+				alphaLimit);
+	}
+
 }
