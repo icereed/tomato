@@ -1,0 +1,14 @@
+#BlueJ class context
+comment0.params=
+comment0.target=void\ start()
+comment1.params=
+comment1.target=void\ stop()
+comment2.params=
+comment2.target=void\ tick()
+comment3.params=
+comment3.target=long\ getElapsedTime()
+comment4.params=
+comment4.target=double\ getTime()
+comment5.params=args
+comment5.target=void\ main(java.lang.String[])
+numComments=6
