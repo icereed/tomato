@@ -181,13 +181,13 @@ public class Level extends GameObject implements Iterable<Entity> {
 
 				boolean collided = false;
 				if (e != null
-						&& (collided = WorldPhysicHandler.isPixelCollide(xc,
-								yc, e.getSprite(), wx, wy, wall.getSprite(),
+						&& (collided = WorldPhysicHandler.isPixelCollide(e.getSprite(),
+								xc, yc, wall.getSprite(), wx, wy,
 								200))) {
 
 					if (horizontally) {
-						if (!WorldPhysicHandler.isPixelCollide(xc, yc - 1,
-								e.getSprite(), wx, wy, wall.getSprite(), 200)) {
+						if (!WorldPhysicHandler.isPixelCollide(e.getSprite(), xc,
+								yc - 1, wall.getSprite(), wx, wy, 200)) {
 							moveUp = true;
 						} else {
 							moveUp = false;

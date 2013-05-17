@@ -5,11 +5,9 @@ import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.BitSet;
 
 import tomato.Input;
 import tomato.entity.Entity;
-import tomato.gfx.Art;
 import tomato.level.Level;
 
 public class WorldPhysicHandler {
@@ -37,8 +35,8 @@ public class WorldPhysicHandler {
 		entities.remove(e);
 	}
 
-	public static boolean isPixelCollide(double x1, double y1,
-			BufferedImage image1, double x2, double y2, BufferedImage image2,
+	public static boolean isPixelCollide(BufferedImage image1, double x1,
+			double y1, BufferedImage image2, double x2, double y2,
 			int alphaLimit) {
 		return isPixelCollide(image1, (int) x1, (int) y1, image2, (int) x2,
 				(int) y2, alphaLimit);

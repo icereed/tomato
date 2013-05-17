@@ -183,8 +183,8 @@ public abstract class Entity implements Physicable {
 	public boolean intersects(Entity o) {
 		return o.getBounds().intersects(getBounds())
 				&& o != this
-				&& WorldPhysicHandler.isPixelCollide(x, y, getSprite(), o.x,
-						o.y, o.getSprite(), 10);
+				&& WorldPhysicHandler.isPixelCollide(getSprite(), x, y, o.getSprite(),
+						o.x, o.y, 10);
 	}
 
 	public void addTickStrategy(TickStrategy s) {
