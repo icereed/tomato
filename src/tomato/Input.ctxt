@@ -1,8 +1,0 @@
-#BlueJ class context
-comment0.params=key\ down
-comment0.target=void\ set(int,\ boolean)
-comment1.params=
-comment1.target=void\ tick()
-comment2.params=
-comment2.target=void\ releaseAllKeys()
-numComments=3
