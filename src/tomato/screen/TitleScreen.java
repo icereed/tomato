@@ -14,7 +14,6 @@ public class TitleScreen extends Screen {
 	private double nextTwink = 0D;
 
 	public TitleScreen() {
-		Sound.introMusic.play();
 	}
 
 	public void render(Graphics g) {
@@ -64,7 +63,6 @@ public class TitleScreen extends Screen {
 				// Sound.startgame.play();
 				Sound.bling.play();
 				setScreen(new GameScreen());
-				Sound.introMusic.stop();
 				input.releaseAllKeys();
 			}
 		}
