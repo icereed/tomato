@@ -1,9 +1,9 @@
 package tomato.wall;
 
 import tomato.entity.Bullet;
-import tomato.entity.Entity;
+import tomato.entity.AbstractEntity;
 
 public interface WallStrategy {
 	public void gotShot(Bullet b);
-	public void gotTouched(Entity e);
+	public void gotTouched(AbstractEntity e);
 }

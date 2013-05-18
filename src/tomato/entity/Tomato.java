@@ -37,6 +37,7 @@ public class Tomato extends PhysicsEntity {
 
 			@Override
 			public void tick(Input input, double delta) {
+				// This makes the Tomato blink.
 				twinkTime += delta;
 				if (twinkTime >= nextTwink) {
 					eyesOpen = !eyesOpen;
@@ -58,12 +59,12 @@ public class Tomato extends PhysicsEntity {
 	}
 
 	@Override
-	public void collided(Entity with) {
+	public void collided(AbstractEntity with) {
 		super.collided(with);
 	}
 
 	@Override
-	public void attack(Entity from) {
+	public void attack(AbstractEntity from) {
 		if (getInvulnerable() == 0) {
 			life -= from.attack;
 			if (life <= 0) {

@@ -14,7 +14,7 @@ import tomato.level.Level;
 import tomato.physics.Physicable;
 import tomato.physics.WorldPhysicHandler;
 
-public abstract class Entity implements Physicable {
+public abstract class AbstractEntity implements Physicable {
 
 	public static final int PLAYER = 1;
 	public static final int DUMMY = 2;
@@ -39,7 +39,7 @@ public abstract class Entity implements Physicable {
 	public boolean interactsWithWorld = false;
 	private ArrayList<TickStrategy> tickStrategies;
 
-	public Entity() {
+	public AbstractEntity() {
 		tickStrategies = new ArrayList<TickStrategy>();
 	}
 
@@ -51,7 +51,7 @@ public abstract class Entity implements Physicable {
 		return onGround;
 	}
 
-	public void attack(Entity from) {
+	public void attack(AbstractEntity from) {
 		this.life -= from.attack;
 		if (this.life <= 0) {
 			this.die();
@@ -64,7 +64,7 @@ public abstract class Entity implements Physicable {
 
 	public abstract BufferedImage getSprite();
 
-	public void collided(Entity with) {
+	public void collided(AbstractEntity with) {
 
 	}
 
@@ -180,7 +180,7 @@ public abstract class Entity implements Physicable {
 		this.faceRight = true;
 	}
 
-	public boolean intersects(Entity o) {
+	public boolean intersects(AbstractEntity o) {
 		return o.getBounds().intersects(getBounds())
 				&& o != this
 				&& WorldPhysicHandler.isPixelCollide(getSprite(), x, y, o.getSprite(),
@@ -191,7 +191,7 @@ public abstract class Entity implements Physicable {
 		tickStrategies.add(s);
 	}
 
-	public Vec2D getConnectionVectorTo(Entity to) {
+	public Vec2D getConnectionVectorTo(AbstractEntity to) {
 
 		Vec2D F = new Vec2D(x + w * 0.5, y + h * 0.5);
 		Vec2D T = new Vec2D(to.x + to.w * 0.5, to.y + to.h * 0.5);
@@ -206,4 +206,26 @@ public abstract class Entity implements Physicable {
 	public void removeTickStrategy(TickStrategy s) {
 		tickStrategies.remove(s);
 	}
+
+	@Override
+	public int getX() {
+		return (int) this.x;
+	}
+
+	@Override
+	public int getY() {
+		return (int) this.y;
+	}
+
+	@Override
+	public int getWidth() {
+		return this.w;
+	}
+
+	@Override
+	public int getHeight() {
+		return this.h;
+	}
+	
+	
 }

@@ -51,7 +51,7 @@ public class Pixel extends PhysicsEntity {
 	}
 
 	@Override
-	public void collided(Entity with) {
+	public void collided(AbstractEntity with) {
 		super.collided(with);
 	}
 

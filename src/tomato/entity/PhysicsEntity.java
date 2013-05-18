@@ -15,7 +15,7 @@ import tomato.item.NullGun;
 import tomato.physics.WorldPhysicHandler;
 import tomato.sound.Sound;
 
-public abstract class PhysicsEntity extends Entity implements LifeObservable,
+public abstract class PhysicsEntity extends AbstractEntity implements LifeObservable,
 		CooldownObservable {
 	public static final int LEFT = 0, RIGHT = 1;
 	protected WorldPhysicHandler physicHandler;

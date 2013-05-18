@@ -1,7 +1,7 @@
 package tomato.trigger;
 
-import tomato.entity.Entity;
+import tomato.entity.AbstractEntity;
 
 public interface ITrigger {
-	public boolean triggers(Entity e);
+	public boolean triggers(AbstractEntity e);
 }

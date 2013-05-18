@@ -22,7 +22,7 @@ public class Dummy extends PhysicsEntity {
 	}
 
 	@Override
-	public void collided(Entity with) {
+	public void collided(AbstractEntity with) {
 		super.collided(with);
 		if (with.getType() == PLAYER) {
 			with.attack(this);
@@ -31,7 +31,7 @@ public class Dummy extends PhysicsEntity {
 	}
 
 	@Override
-	public void attack(Entity from) {
+	public void attack(AbstractEntity from) {
 		super.attack(from);
 		new PixelExplosion(level, (int) (x + 0.5 * w), (int) (y + 0.5 * h),
 				50, 0.5D, 400, new Color(0xFFDF59));
@@ -52,7 +52,6 @@ public class Dummy extends PhysicsEntity {
 
 	@Override
 	public BufferedImage getSprite() {
-		// TODO Auto-generated method stub
 		return ((!faceRight) ? Art.player1 : Art.player2)[0][1];
 	}
 }
