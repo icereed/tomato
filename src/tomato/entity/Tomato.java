@@ -107,8 +107,8 @@ public class Tomato extends PhysicsEntity {
 		if (cam.x < 0) {
 			cam.x = 0;
 		}
-		if (cam.x + cam.width > level.w) {
-			cam.x = level.w - cam.width;
+		if (cam.x + cam.width > level.getWidth()) {
+			cam.x = level.getWidth() - cam.width;
 		}
 		if (y < 0) {
 			g.drawImage(getSprite(), (int) Math.floor(x - cam.x),

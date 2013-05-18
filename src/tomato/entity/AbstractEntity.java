@@ -144,7 +144,7 @@ public abstract class AbstractEntity implements Physicable {
 			this.y -= dy * bounce;
 			ok = false;
 		}
-		if (this.y + this.h > this.level.h) {
+		if (this.y + this.h > this.level.getHeight()) {
 			this.ya = 0;
 			this.onGround = true;
 			ok = false;

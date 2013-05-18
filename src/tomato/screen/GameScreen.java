@@ -9,7 +9,11 @@ import tomato.Camera;
 import tomato.GameObject;
 import tomato.Input;
 import tomato.Game;
+import tomato.entity.AbstractEntity;
+import tomato.entity.CooldownObserver;
+import tomato.entity.EntityFactory;
 import tomato.entity.LifeObserver;
+import tomato.entity.PhysicsEntity;
 import tomato.gfx.Art;
 import tomato.level.Level;
 import tomato.screen.layer.Background;
@@ -30,8 +34,14 @@ public class GameScreen extends Screen implements LifeObserver {
 	public GameScreen() {
 		statsLayer = new PlayerStatsLayer();
 		cam = Camera.getInstance().init(Game.GAME_WIDTH, Game.GAME_HEIGHT);
-		level = new Level(this, statsLayer, 1000, Game.GAME_HEIGHT, 10, 10);
+		level = new Level(1000, Game.GAME_HEIGHT, 10, 10);
 		level.init();
+		PhysicsEntity player = new EntityFactory(level.getPhysicHandler())
+				.getLivingEntityById(AbstractEntity.PLAYER, 16, 16);
+		player.addObserver((CooldownObserver) statsLayer);
+		player.addObserver(this);
+		level.setPlayer(player);
+
 		gameObjects = new ArrayList<GameObject>();
 		gameObjects.add(new ColorLayer(new Color(0x7AA1FF)));
 		fillBackgounds(Art.level_bg2, 0.5, 0.1);
@@ -46,7 +56,7 @@ public class GameScreen extends Screen implements LifeObserver {
 	public void fillBackgounds(BufferedImage img, double factorX, double factorY) {
 		int width = img.getWidth();
 
-		for (int i = 0; i * width < level.w; i++) {
+		for (int i = 0; i * width < level.getWidth(); i++) {
 			gameObjects.add(new Background(img, i * width, factorX, factorY));
 		}
 	}
@@ -65,7 +75,7 @@ public class GameScreen extends Screen implements LifeObserver {
 			for (int j = 0; j < Game.GAME_HEIGHT; j++) {
 				g.drawLine(0, j * 15 - cam.y, Game.GAME_WIDTH, j * 15 - cam.y);
 			}
-			for (int i = 0; i < level.w / 15; i++) {
+			for (int i = 0; i < level.getWidth() / 15; i++) {
 				g.drawLine(i * 15 - cam.x, 0, i * 15 - cam.x, Game.GAME_HEIGHT);
 			}
 		}

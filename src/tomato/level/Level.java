@@ -10,12 +10,10 @@ import tomato.Camera;
 import tomato.Game;
 import tomato.GameObject;
 import tomato.Input;
-import tomato.entity.Bullet;
-import tomato.entity.CooldownObserver;
 import tomato.entity.AbstractEntity;
+import tomato.entity.Bullet;
 import tomato.entity.EntityFactory;
 import tomato.entity.PhysicsEntity;
-import tomato.entity.PlayerLogic;
 import tomato.entity.Tomato;
 import tomato.gfx.Art;
 import tomato.physics.WorldPhysicHandler;
@@ -28,7 +26,7 @@ import tomato.wall.Wall;
 public class Level extends GameObject implements Iterable<AbstractEntity> {
 	public static double GRAVITY = 1000D;
 	private GameScreen screen;
-	public int w, h;
+	private int w, h;
 	private ArrayList<AbstractEntity> entities;
 	private ArrayList<Wall> walls;
 	private ArrayList<ITrigger> triggers;
@@ -36,32 +34,21 @@ public class Level extends GameObject implements Iterable<AbstractEntity> {
 	private EntityFactory entityFactory;
 	private LevelSave lastSave;
 	private PhysicsEntity player;
-	private CooldownObserver cooldownObserver;
 	private boolean isReady[] = { false, false };
 
-	public Level(GameScreen screen, CooldownObserver cooldownObserver, int w,
-			int h, int xSpawn, int ySpawn) {
-		this.screen = screen;
-		this.w = w;
+	public Level(int w, int h, int xSpawn, int ySpawn) {
+		this.screen = null;
+		this.setWidth(w);
 		this.h = h;
 		this.entities = new ArrayList<AbstractEntity>();
 		walls = new ArrayList<Wall>();
 		this.physicHandler = new WorldPhysicHandler(this);
 		entityFactory = new EntityFactory(physicHandler);
-		this.cooldownObserver = cooldownObserver;
 		this.triggers = new ArrayList<ITrigger>();
 	}
 
 	public void init() {
-		player = new Tomato(physicHandler, 10, 10);
-		// player = new Dummy(physicHandler, 10, 10);
-		// player.clearTickStrategies();
-		// player.giveGun(new PlayerGun(player, this, 0, 0.1, true));
-		player.addTickStrategy(new PlayerLogic(player));
-		add(player);
-		player.addObserver(cooldownObserver);
-		player.addObserver(screen);
-		w = Art.level1.getWidth() * Wall.TILE_SIZE;
+		setWidth(Art.level1.getWidth() * Wall.TILE_SIZE);
 		LevelImageInterpreter.readLevel(Art.level1, this);
 
 		System.out.println("Level size: " + walls.size());
@@ -157,7 +144,7 @@ public class Level extends GameObject implements Iterable<AbstractEntity> {
 			xa = 0;
 			return false;
 		}
-		if (xc + w > this.w && xa > 0) {
+		if (xc + w > this.getWidth() && xa > 0) {
 			xa = 0;
 			return false;
 		}
@@ -180,13 +167,13 @@ public class Level extends GameObject implements Iterable<AbstractEntity> {
 
 				boolean collided = false;
 				if (e != null
-						&& (collided = WorldPhysicHandler.isPixelCollide(e.getSprite(),
-								xc, yc, wall.getSprite(), wx, wy,
-								200))) {
+						&& (collided = WorldPhysicHandler.isPixelCollide(
+								e.getSprite(), xc, yc, wall.getSprite(), wx,
+								wy, 200))) {
 
 					if (horizontally) {
-						if (!WorldPhysicHandler.isPixelCollide(e.getSprite(), xc,
-								yc - 1, wall.getSprite(), wx, wy, 200)) {
+						if (!WorldPhysicHandler.isPixelCollide(e.getSprite(),
+								xc, yc - 1, wall.getSprite(), wx, wy, 200)) {
 							moveUp = true;
 						} else {
 							moveUp = false;
@@ -238,5 +225,41 @@ public class Level extends GameObject implements Iterable<AbstractEntity> {
 
 	public void remove(Wall wall) {
 		walls.remove(wall);
+	}
+
+	public PhysicsEntity getPlayer() {
+		return this.player;
+	}
+
+	public void setPlayer(PhysicsEntity player) {
+		PhysicsEntity current = getPlayer();
+		if (current != null) {
+			this.remove(current);
+		}
+		this.player = player;
+		this.add(player);
+
+	}
+
+	/**
+	 * @return The width.
+	 */
+	public int getWidth() {
+		return w;
+	}
+
+	/**
+	 * @param w the width to set.
+	 */
+	public void setWidth(int w) {
+		this.w = w;
+	}
+
+	public int getHeight() {
+		return h;
+	}
+
+	public void setHeight(int h) {
+		this.h = h;
 	}
 }
