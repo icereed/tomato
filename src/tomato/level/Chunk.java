@@ -2,20 +2,23 @@ package tomato.level;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import tomato.Placeable;
 
 /**
- * A chunk is a datastructure which allows to split a whole level up into smaller chunks in order to make the collision detection more efficient.
+ * A chunk is a datastructure which allows to split a whole level up into
+ * smaller chunks in order to make the collision detection more efficient.
+ * 
  * @author Icereed
- *
- * @param <E> Some placeable class.
+ * 
+ * @param <E>
+ *            Some placeable class.
  */
 
-
 @SuppressWarnings("serial")
-public class Chunk<E extends Placeable> implements Placeable {
+public class Chunk<E extends Placeable> implements Placeable, Iterable<E> {
 
 	List<E> content;
 	Rectangle bounds;
@@ -81,6 +84,11 @@ public class Chunk<E extends Placeable> implements Placeable {
 	@Override
 	public int getHeight() {
 		return (int) bounds.getHeight();
+	}
+
+	@Override
+	public Iterator<E> iterator() {
+		return content.iterator();
 	}
 
 }

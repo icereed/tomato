@@ -15,8 +15,8 @@ import tomato.item.NullGun;
 import tomato.physics.WorldPhysicHandler;
 import tomato.sound.Sound;
 
-public abstract class PhysicsEntity extends AbstractEntity implements LifeObservable,
-		CooldownObservable {
+public abstract class PhysicsEntity extends AbstractEntity implements
+		LifeObservable, CooldownObservable {
 	public static final int LEFT = 0, RIGHT = 1;
 	protected WorldPhysicHandler physicHandler;
 	protected int brakeFriction = 300;
@@ -151,8 +151,10 @@ public abstract class PhysicsEntity extends AbstractEntity implements LifeObserv
 	}
 
 	public void addObserver(LifeObserver e) {
-		lifeObservers.add(e);
-		e.updateLife(life);
+		if (e != null) {
+			lifeObservers.add(e);
+			e.updateLife(life);
+		}
 	}
 
 	public void removeObserver(LifeObserver e) {
@@ -160,8 +162,10 @@ public abstract class PhysicsEntity extends AbstractEntity implements LifeObserv
 	}
 
 	public void addObserver(CooldownObserver e) {
-		cooldownObservers.add(e);
-		e.updateCooldown(gun.getCooldown());
+		if (e != null) {
+			cooldownObservers.add(e);
+			e.updateCooldown(gun.getCooldown());
+		}
 	}
 
 	public void removeObserver(CooldownObserver e) {

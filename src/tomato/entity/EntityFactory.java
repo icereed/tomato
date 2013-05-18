@@ -14,7 +14,10 @@ public class EntityFactory {
 		case AbstractEntity.DUMMY:
 			return new Dummy(worldPhysicHandler, xPosition, yPosition);
 		case AbstractEntity.PLAYER:
-			return new Tomato(worldPhysicHandler, xPosition, yPosition);
+			Tomato player = new Tomato(worldPhysicHandler, xPosition, yPosition);
+					player.addTickStrategy(new PlayerLogic(player));
+
+			return player;
 
 		default:
 			return null;

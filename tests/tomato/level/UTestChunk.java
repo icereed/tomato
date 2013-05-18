@@ -1,14 +1,13 @@
 package tomato.level;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import java.awt.Point;
 import java.awt.Rectangle;
 
 import org.junit.Test;
 
-import tomato.entity.CooldownObserver;
-import tomato.screen.GameScreen;
 import tomato.wall.Wall;
 import tomato.wall.WallFactory;
 
@@ -17,12 +16,7 @@ public class UTestChunk {
 	@Test
 	public void test_add_01() {
 		Chunk<Wall> c = new Chunk<Wall>(new Rectangle(0, 0, 1000, 100));
-		Level l = new Level(null, new CooldownObserver() {
-
-			@Override
-			public void updateCooldown(double cooldown) {
-			}
-		}, 1000, 1000, 0, 0);
+		Level l = new Level(1000, 1000);
 
 		int i;
 		int succeded = 0;
@@ -40,7 +34,7 @@ public class UTestChunk {
 		}
 
 		int j = 0;
-		for (Wall w : c.getContent()) {
+		for (Wall w : c) {
 			assertTrue("Point and wall should intersect.", w.getBounds()
 					.intersects(new Rectangle((j * Wall.TILE_SIZE), 0, 1, 1)));
 			j++;
