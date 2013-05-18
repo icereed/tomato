@@ -10,7 +10,7 @@ public class LevelImageInterpreter {
 	public static Level readLevel(BufferedImage img, Level level) {
 		// Art.level.getRGB(xo * 31, yo * 23, 32, 24, pixels, 0, 32);
 		BufferedImage lvl = img;
-		int topOffset = (lvl.getHeight() * Wall.TILE_SIZE - level.h);
+		int topOffset = (lvl.getHeight() * Wall.TILE_SIZE - level.getHeight());
 		Integer.toHexString((Color.GRAY.getRGB() & 0xffffff) | 0x1000000)
 				.substring(1);
 		// X-Coordinates

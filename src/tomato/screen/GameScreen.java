@@ -16,11 +16,13 @@ import tomato.entity.LifeObserver;
 import tomato.entity.PhysicsEntity;
 import tomato.gfx.Art;
 import tomato.level.Level;
+import tomato.level.LevelFactory;
 import tomato.screen.layer.Background;
 import tomato.screen.layer.ColorLayer;
 import tomato.screen.layer.DescriptionLayer;
 import tomato.screen.layer.FadeOutLayer;
 import tomato.screen.layer.PlayerStatsLayer;
+import tomato.wall.Wall;
 
 public class GameScreen extends Screen implements LifeObserver {
 	private Camera cam;
@@ -33,14 +35,15 @@ public class GameScreen extends Screen implements LifeObserver {
 
 	public GameScreen() {
 		statsLayer = new PlayerStatsLayer();
+		level = LevelFactory.getLevelById(LevelFactory.level1);
 		cam = Camera.getInstance().init(Game.GAME_WIDTH, Game.GAME_HEIGHT);
-		level = new Level(1000, Game.GAME_HEIGHT, 10, 10);
 		level.init();
 		PhysicsEntity player = new EntityFactory(level.getPhysicHandler())
-				.getLivingEntityById(AbstractEntity.PLAYER, 16, 16);
+				.getLivingEntityById(AbstractEntity.PLAYER, 10, 10);
 		player.addObserver((CooldownObserver) statsLayer);
 		player.addObserver(this);
 		level.setPlayer(player);
+
 
 		gameObjects = new ArrayList<GameObject>();
 		gameObjects.add(new ColorLayer(new Color(0x7AA1FF)));

@@ -16,7 +16,7 @@ public class UTestChunk {
 	@Test
 	public void test_add_01() {
 		Chunk<Wall> c = new Chunk<Wall>(new Rectangle(0, 0, 1000, 100));
-		Level l = new Level(1000, 1000, 0, 0);
+		Level l = new Level(1000, 1000);
 
 		int i;
 		int succeded = 0;

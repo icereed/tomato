@@ -14,12 +14,9 @@ import tomato.entity.AbstractEntity;
 import tomato.entity.Bullet;
 import tomato.entity.EntityFactory;
 import tomato.entity.PhysicsEntity;
-import tomato.entity.Tomato;
-import tomato.gfx.Art;
 import tomato.physics.WorldPhysicHandler;
 import tomato.screen.GameScreen;
 import tomato.screen.Screen;
-import tomato.trigger.GoalTrigger;
 import tomato.trigger.ITrigger;
 import tomato.wall.Wall;
 
@@ -36,42 +33,30 @@ public class Level extends GameObject implements Iterable<AbstractEntity> {
 	private PhysicsEntity player;
 	private boolean isReady[] = { false, false };
 
-	public Level(int w, int h, int xSpawn, int ySpawn) {
+	public Level(int w, int h) {
 		this.screen = null;
 		this.setWidth(w);
 		this.h = h;
 		this.entities = new ArrayList<AbstractEntity>();
-		walls = new ArrayList<Wall>();
+		setWalls(new ArrayList<Wall>());
 		this.physicHandler = new WorldPhysicHandler(this);
 		entityFactory = new EntityFactory(physicHandler);
-		this.triggers = new ArrayList<ITrigger>();
+		this.setTriggers(new ArrayList<ITrigger>());
 	}
 
 	public void init() {
-		setWidth(Art.level1.getWidth() * Wall.TILE_SIZE);
-		LevelImageInterpreter.readLevel(Art.level1, this);
-
-		System.out.println("Level size: " + walls.size());
-		walls = WallTesselator.tesselate(walls);
-		isReady[0] = true;
-		System.out.println("Level size: " + walls.size());
-		triggers.add(new GoalTrigger(player, new Rectangle(16, -464, 80, 143)));
 		Game.levelStarted = Game.getGameInstance().getTimer().getTime();
-
+		isReady[0] = true;
 	}
 
 	public void reset() {
 		if (lastSave == null) {
 			entities.clear();
-			walls.clear();
+			getWalls().clear();
 			init();
 		} else {
-
 			player.remove();
-			player = new Tomato(physicHandler, lastSave.getPosition().x,
-					lastSave.getPosition().y);
-			add(player);
-			player.addObserver(screen);
+			player = null;
 		}
 
 	}
@@ -82,7 +67,7 @@ public class Level extends GameObject implements Iterable<AbstractEntity> {
 	}
 
 	public void add(Wall w) {
-		walls.add(w);
+		getWalls().add(w);
 	}
 
 	public void tick(Input input, double delta) {
@@ -91,10 +76,6 @@ public class Level extends GameObject implements Iterable<AbstractEntity> {
 			isReady[1] = true;
 		}
 
-		if (input.buttons[Input.SAVE] && !input.oldButtons[Input.SAVE]) {
-			// save();
-			System.out.println(walls.size());
-		}
 		physicHandler.tick(input, delta);
 		for (int i = 0; i < entities.size(); i++) {
 
@@ -108,7 +89,7 @@ public class Level extends GameObject implements Iterable<AbstractEntity> {
 					e.collided(o);
 				}
 			}
-			for (ITrigger element : triggers) {
+			for (ITrigger element : getTriggers()) {
 				element.triggers(e);
 			}
 
@@ -125,7 +106,7 @@ public class Level extends GameObject implements Iterable<AbstractEntity> {
 				.hasNext();) {
 			iterator.next().render(g, cam);
 		}
-		for (Wall wall : walls) {
+		for (Wall wall : getWalls()) {
 			wall.render(g, cam);
 		}
 	}
@@ -155,7 +136,7 @@ public class Level extends GameObject implements Iterable<AbstractEntity> {
 
 		int wh, ww, wx, wy;
 		boolean moveUp = false;
-		for (Wall wall : walls) {
+		for (Wall wall : getWalls()) {
 
 			wh = wall.getHeight();
 			ww = wall.getWidth();
@@ -202,7 +183,7 @@ public class Level extends GameObject implements Iterable<AbstractEntity> {
 	}
 
 	public void save() {
-		lastSave = new LevelSave(entities, walls, new Point((int) player.x,
+		lastSave = new LevelSave(entities, getWalls(), new Point((int) player.x,
 				(int) player.y));
 	}
 
@@ -224,7 +205,7 @@ public class Level extends GameObject implements Iterable<AbstractEntity> {
 	}
 
 	public void remove(Wall wall) {
-		walls.remove(wall);
+		getWalls().remove(wall);
 	}
 
 	public PhysicsEntity getPlayer() {
@@ -261,5 +242,33 @@ public class Level extends GameObject implements Iterable<AbstractEntity> {
 
 	public void setHeight(int h) {
 		this.h = h;
+	}
+
+	/**
+	 * @return the walls
+	 */
+	public ArrayList<Wall> getWalls() {
+		return walls;
+	}
+
+	/**
+	 * @param walls the walls to set
+	 */
+	public void setWalls(ArrayList<Wall> walls) {
+		this.walls = walls;
+	}
+
+	/**
+	 * @return the triggers
+	 */
+	public ArrayList<ITrigger> getTriggers() {
+		return triggers;
+	}
+
+	/**
+	 * @param triggers the triggers to set
+	 */
+	public void setTriggers(ArrayList<ITrigger> triggers) {
+		this.triggers = triggers;
 	}
 }
