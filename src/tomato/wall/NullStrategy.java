@@ -1,7 +1,7 @@
 package tomato.wall;
 
 import tomato.entity.Bullet;
-import tomato.entity.Entity;
+import tomato.entity.AbstractEntity;
 
 public class NullStrategy implements WallStrategy {
 
@@ -11,7 +11,7 @@ public class NullStrategy implements WallStrategy {
 	}
 
 	@Override
-	public void gotTouched(Entity e) {
+	public void gotTouched(AbstractEntity e) {
 
 	}
 

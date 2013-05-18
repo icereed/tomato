@@ -1,15 +1,17 @@
 package tomato.wall;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import tomato.Camera;
 import tomato.entity.Bullet;
-import tomato.entity.Entity;
+import tomato.entity.AbstractEntity;
 import tomato.level.Level;
 
 public class MultipleWall implements Wall {
 	private int x, y, singleW, singleH, wallWidth, wallHeight;
+	private Rectangle bounds;
 	private BufferedImage singleSprite, sprite;
 	private int id;
 	private Wall single;
@@ -26,6 +28,8 @@ public class MultipleWall implements Wall {
 		this.id = single.getType();
 		this.single = single;
 		this.strategy = single.getStrategy();
+		this.bounds = new Rectangle(this.x, this.y, this.getWidth(),
+				this.getHeight());
 
 		BufferedImage img = new BufferedImage(getWidth(), getHeight(),
 				singleSprite.getType());
@@ -68,7 +72,7 @@ public class MultipleWall implements Wall {
 	}
 
 	@Override
-	public void gotTouched(Entity e) {
+	public void gotTouched(AbstractEntity e) {
 		strategy.gotTouched(e);
 	}
 
@@ -109,6 +113,11 @@ public class MultipleWall implements Wall {
 	public WallStrategy getStrategy() {
 		// TODO Auto-generated method stub
 		return strategy;
+	}
+
+	@Override
+	public Rectangle getBounds() {
+		return this.bounds;
 	}
 
 }

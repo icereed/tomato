@@ -12,7 +12,7 @@ import tomato.GameObject;
 import tomato.Input;
 import tomato.entity.Bullet;
 import tomato.entity.CooldownObserver;
-import tomato.entity.Entity;
+import tomato.entity.AbstractEntity;
 import tomato.entity.EntityFactory;
 import tomato.entity.PhysicsEntity;
 import tomato.entity.PlayerLogic;
@@ -25,11 +25,11 @@ import tomato.trigger.GoalTrigger;
 import tomato.trigger.ITrigger;
 import tomato.wall.Wall;
 
-public class Level extends GameObject implements Iterable<Entity> {
+public class Level extends GameObject implements Iterable<AbstractEntity> {
 	public static double GRAVITY = 1000D;
 	private GameScreen screen;
 	public int w, h;
-	private ArrayList<Entity> entities;
+	private ArrayList<AbstractEntity> entities;
 	private ArrayList<Wall> walls;
 	private ArrayList<ITrigger> triggers;
 	private WorldPhysicHandler physicHandler;
@@ -44,13 +44,12 @@ public class Level extends GameObject implements Iterable<Entity> {
 		this.screen = screen;
 		this.w = w;
 		this.h = h;
-		this.entities = new ArrayList<Entity>();
+		this.entities = new ArrayList<AbstractEntity>();
 		walls = new ArrayList<Wall>();
 		this.physicHandler = new WorldPhysicHandler(this);
 		entityFactory = new EntityFactory(physicHandler);
 		this.cooldownObserver = cooldownObserver;
 		this.triggers = new ArrayList<ITrigger>();
-		init();
 	}
 
 	public void init() {
@@ -90,7 +89,7 @@ public class Level extends GameObject implements Iterable<Entity> {
 
 	}
 
-	public void add(Entity e) {
+	public void add(AbstractEntity e) {
 		entities.add(e);
 		e.init(this);
 	}
@@ -112,12 +111,12 @@ public class Level extends GameObject implements Iterable<Entity> {
 		physicHandler.tick(input, delta);
 		for (int i = 0; i < entities.size(); i++) {
 
-			Entity e = entities.get(i);
+			AbstractEntity e = entities.get(i);
 
 			for (int j = 0; j < entities.size() && e.isInteractsWithWorld()
-					&& e.getType() != Entity.PIXEL; j++) {
+					&& e.getType() != AbstractEntity.PIXEL; j++) {
 
-				Entity o = entities.get(j);
+				AbstractEntity o = entities.get(j);
 				if (o.isInteractsWithWorld() && e.intersects(o)) {
 					e.collided(o);
 				}
@@ -135,7 +134,7 @@ public class Level extends GameObject implements Iterable<Entity> {
 
 	public void render(Graphics g, Camera cam) {
 
-		for (Iterator<Entity> iterator = entities.iterator(); iterator
+		for (Iterator<AbstractEntity> iterator = entities.iterator(); iterator
 				.hasNext();) {
 			iterator.next().render(g, cam);
 		}
@@ -144,12 +143,12 @@ public class Level extends GameObject implements Iterable<Entity> {
 		}
 	}
 
-	public boolean isFree(Entity entity) {
+	public boolean isFree(AbstractEntity entity) {
 		return isFree(entity, entity.x, entity.y, entity.w, entity.h,
 				entity.xa, entity.ya, false);
 	}
 
-	public boolean isFree(Entity e, double xc, double yc, int w, int h,
+	public boolean isFree(AbstractEntity e, double xc, double yc, int w, int h,
 			double xa, double ya, boolean horizontally) {
 		if (ya > 0 && yc >= this.h) {
 			e.die();
@@ -194,7 +193,7 @@ public class Level extends GameObject implements Iterable<Entity> {
 						}
 					}
 
-					if (e.getType() == Entity.BULLET) {
+					if (e.getType() == AbstractEntity.BULLET) {
 						wall.gotShot((Bullet) e);
 					} else {
 						wall.gotTouched(e);
@@ -221,7 +220,7 @@ public class Level extends GameObject implements Iterable<Entity> {
 	}
 
 	@Override
-	public Iterator<Entity> iterator() {
+	public Iterator<AbstractEntity> iterator() {
 		return entities.iterator();
 	}
 
@@ -233,7 +232,7 @@ public class Level extends GameObject implements Iterable<Entity> {
 		return physicHandler;
 	}
 
-	public void remove(Entity entity) {
+	public void remove(AbstractEntity entity) {
 		entities.remove(entity);
 	}
 

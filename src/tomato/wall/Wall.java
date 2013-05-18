@@ -4,12 +4,12 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import tomato.Camera;
-import tomato.GameObject;
+import tomato.Placeable;
 import tomato.entity.Bullet;
-import tomato.entity.Entity;
+import tomato.entity.AbstractEntity;
 import tomato.level.Level;
 
-public interface Wall {
+public interface Wall extends Placeable{
 	public static final int SAND_MIDDLE = 1;
 	public static final int BRICK = 2;
 	public static final int GRASS = 3;
@@ -22,17 +22,11 @@ public interface Wall {
 	public static final int STAIR_2 = 0xFFAA02;
 	public static final int STAIR_3 = 0xFFAA03;
 
-	public int getX();
 
-	public int getY();
-
-	public int getWidth();
-
-	public int getHeight();
 
 	public BufferedImage getSprite();
 
-	public void gotTouched(Entity e);
+	public void gotTouched(AbstractEntity e);
 
 	public int getType();
 

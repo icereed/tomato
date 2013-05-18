@@ -1,27 +1,26 @@
 package tomato.wall;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import tomato.Camera;
 import tomato.Input;
 import tomato.entity.Bullet;
-import tomato.entity.Entity;
+import tomato.entity.AbstractEntity;
 import tomato.level.Level;
 
 public abstract class AbstractWall implements Wall {
 
-	private int x, y, w, h;
+	private Rectangle bounds;
 	private BufferedImage sprite;
 	private Level level;
 	private WallStrategy strategy;
 
 	public AbstractWall(int x, int y, int w, int h, BufferedImage sprite,
 			Level level, WallStrategy strategy) {
-		this.x = x;
-		this.y = y;
-		this.w = w;
-		this.h = h;
+
+		this.bounds = new Rectangle(x,y,w,h);
 		this.sprite = sprite;
 		this.level = level;
 		if (strategy == null) {
@@ -47,12 +46,12 @@ public abstract class AbstractWall implements Wall {
 
 	@Override
 	public int getX() {
-		return x;
+		return (int) bounds.getX();
 	}
 
 	@Override
 	public int getY() {
-		return y;
+		return (int) bounds.getY();
 	}
 
 	@Override
@@ -61,18 +60,18 @@ public abstract class AbstractWall implements Wall {
 	}
 
 	@Override
-	public void gotTouched(Entity e) {
+	public void gotTouched(AbstractEntity e) {
 		strategy.gotTouched(e);
 	}
 
 	@Override
 	public int getWidth() {
-		return w;
+		return (int) bounds.getWidth();
 	}
 
 	@Override
 	public int getHeight() {
-		return h;
+		return (int) bounds.getHeight();
 	}
 
 	@Override
@@ -83,6 +82,11 @@ public abstract class AbstractWall implements Wall {
 	@Override
 	public WallStrategy getStrategy() {
 		return strategy;
+	}
+	
+	@Override
+	public Rectangle getBounds() {
+		return bounds;
 	}
 
 	@Override

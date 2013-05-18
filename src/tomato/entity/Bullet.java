@@ -12,12 +12,12 @@ import tomato.physics.WorldPhysicHandler;
 
 public class Bullet extends PhysicsEntity {
 	public static int BULLET_DIAMETER = 5;
-	Entity from;
+	AbstractEntity from;
 	private BufferedImage sprite;
 	private Level level;
 
 	public Bullet(WorldPhysicHandler worldPhysicHandler, double x, double y,
-			double xa, double ya, Entity from, int strenght, Level level) {
+			double xa, double ya, AbstractEntity from, int strenght, Level level) {
 		super(worldPhysicHandler);
 		this.x = x;
 		this.y = y;
@@ -49,7 +49,7 @@ public class Bullet extends PhysicsEntity {
 	}
 
 	@Override
-	public void collided(Entity with) {
+	public void collided(AbstractEntity with) {
 		super.collided(with);
 		if ((with != this.from && with.interactsWithWorld)
 				&& (with.getType() != BULLET || with.getType() != PIXEL)) {
@@ -83,7 +83,7 @@ public class Bullet extends PhysicsEntity {
 		super.tick(input, delta);
 	}
 
-	public Entity getFrom() {
+	public AbstractEntity getFrom() {
 		return from;
 	}
 

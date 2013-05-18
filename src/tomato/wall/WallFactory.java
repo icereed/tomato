@@ -3,7 +3,7 @@ package tomato.wall;
 import java.awt.image.BufferedImage;
 
 import tomato.entity.Bullet;
-import tomato.entity.Entity;
+import tomato.entity.AbstractEntity;
 import tomato.gfx.Art;
 import tomato.level.Level;
 
@@ -55,7 +55,7 @@ public class WallFactory {
 			WallStrategy s = new WallStrategy() {
 				
 				@Override
-				public void gotTouched(Entity e) {
+				public void gotTouched(AbstractEntity e) {
 					if (id == Wall.GROUND_SPIKES || id == Wall.TOP_SPIKES) {
 						e.die();
 					}					

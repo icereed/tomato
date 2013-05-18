@@ -7,31 +7,31 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import tomato.Input;
-import tomato.entity.Entity;
+import tomato.entity.AbstractEntity;
 import tomato.level.Level;
 
 public class WorldPhysicHandler {
-	private ArrayList<Entity> entities;
+	private ArrayList<AbstractEntity> entities;
 	private Level level;
 
 	public WorldPhysicHandler(Level level) {
-		entities = new ArrayList<Entity>();
+		entities = new ArrayList<AbstractEntity>();
 		this.level = level;
 	}
 
 	public void tick(Input input, double delta) {
-		for (Entity e : entities) {
+		for (AbstractEntity e : entities) {
 			// if (!e.isOnGround()) {
 			e.ya += Level.GRAVITY * delta;
 			// }
 		}
 	}
 
-	public void add(Entity e) {
+	public void add(AbstractEntity e) {
 		entities.add(e);
 	}
 
-	public void remove(Entity e) {
+	public void remove(AbstractEntity e) {
 		entities.remove(e);
 	}
 

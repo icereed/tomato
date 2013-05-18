@@ -11,9 +11,9 @@ public class EntityFactory {
 
 	public PhysicsEntity getLivingEntityById(int id, int xPosition, int yPosition) {
 		switch (id) {
-		case Entity.DUMMY:
+		case AbstractEntity.DUMMY:
 			return new Dummy(worldPhysicHandler, xPosition, yPosition);
-		case Entity.PLAYER:
+		case AbstractEntity.PLAYER:
 			return new Tomato(worldPhysicHandler, xPosition, yPosition);
 
 		default:

@@ -3,22 +3,22 @@ package tomato.level;
 import java.awt.Point;
 import java.util.ArrayList;
 
-import tomato.entity.Entity;
+import tomato.entity.AbstractEntity;
 import tomato.wall.Wall;
 
 public class LevelSave {
-	private ArrayList<Entity> entities;
+	private ArrayList<AbstractEntity> entities;
 	private ArrayList<Wall> walls;
 	private Point position;
 
-	public LevelSave(ArrayList<Entity> entities, ArrayList<Wall> walls,
+	public LevelSave(ArrayList<AbstractEntity> entities, ArrayList<Wall> walls,
 			Point position) {
-		this.entities = new ArrayList<Entity>(entities);
+		this.entities = new ArrayList<AbstractEntity>(entities);
 		this.walls = new ArrayList<Wall>(walls);
 		this.position = position;
 	}
 
-	public ArrayList<Entity> getEntities() {
+	public ArrayList<AbstractEntity> getEntities() {
 		return entities;
 	}
 

@@ -31,6 +31,7 @@ public class GameScreen extends Screen implements LifeObserver {
 		statsLayer = new PlayerStatsLayer();
 		cam = Camera.getInstance().init(Game.GAME_WIDTH, Game.GAME_HEIGHT);
 		level = new Level(this, statsLayer, 1000, Game.GAME_HEIGHT, 10, 10);
+		level.init();
 		gameObjects = new ArrayList<GameObject>();
 		gameObjects.add(new ColorLayer(new Color(0x7AA1FF)));
 		fillBackgounds(Art.level_bg2, 0.5, 0.1);
