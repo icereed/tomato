@@ -4,9 +4,9 @@ import java.awt.Graphics;
 
 import tomato.Game;
 import tomato.Input;
+import tomato.StringUtils;
 import tomato.gfx.Art;
 import tomato.sound.Sound;
-import tomato.trigger.StringUtils;
 
 public class GameOverScreen extends Screen {
 	private double time = 0D;

@@ -2,6 +2,7 @@ package tomato.screen;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -22,6 +23,7 @@ import tomato.screen.layer.ColorLayer;
 import tomato.screen.layer.DescriptionLayer;
 import tomato.screen.layer.FadeOutLayer;
 import tomato.screen.layer.PlayerStatsLayer;
+import tomato.trigger.GoalTrigger;
 import tomato.wall.Wall;
 
 public class GameScreen extends Screen implements LifeObserver {
@@ -43,6 +45,7 @@ public class GameScreen extends Screen implements LifeObserver {
 		player.addObserver((CooldownObserver) statsLayer);
 		player.addObserver(this);
 		level.setPlayer(player);
+		level.getTriggers().add(new GoalTrigger(player, new Rectangle(16, -464, 80, 143)));
 
 
 		gameObjects = new ArrayList<GameObject>();

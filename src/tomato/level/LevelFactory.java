@@ -1,10 +1,7 @@
 package tomato.level;
 
-import java.awt.Rectangle;
-
 import tomato.Game;
 import tomato.gfx.Art;
-import tomato.trigger.GoalTrigger;
 import tomato.wall.Wall;
 
 public class LevelFactory {
@@ -22,7 +19,6 @@ public class LevelFactory {
 			Level ret = new Level(w, h);
 			LevelImageInterpreter.readLevel(Art.level1, ret);
 			ret.setWalls(WallTesselator.tesselate(ret.getWalls())); // Shrink the amount of individual wall tiles
-			ret.getTriggers().add(new GoalTrigger(ret.getPlayer(), new Rectangle(16, -464, 80, 143)));
 			return ret;
 		default:
 			return null;
