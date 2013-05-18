@@ -29,6 +29,16 @@ public class Input extends MouseAdapter {
 	public boolean[] mouseButtons = new boolean[64];
 	public boolean[] oldMouseButtons = new boolean[64];
 
+	/**
+	 * Whenever there is a change of the status of a key on the keyboard, this
+	 * method will be called.
+	 * 
+	 * @param key
+	 *            Keycode of a KeyEvent.
+	 * @param down
+	 *            Whether the button is pressed at the time the function is
+	 *            called.
+	 */
 	public void setKey(int key, boolean down) {
 		int button = -1;
 
@@ -85,6 +95,16 @@ public class Input extends MouseAdapter {
 	public static final int LEFT_CLICK = MouseEvent.BUTTON3;
 	public static final int MIDDLE_CLICK = MouseEvent.BUTTON2;
 
+	/**
+	 * Whenever there is a change of the status of a mousekey of the mouse, this
+	 * method will be called.
+	 * 
+	 * @param key
+	 *            Keycode of a MouseEvent.
+	 * @param down
+	 *            Whether the button is pressed at the time the function is
+	 *            called.
+	 */
 	public void setMouseKey(int key, boolean down) {
 		mouseButtons[key] = down;
 		if (key == RIGHT_CLICK) {
@@ -92,10 +112,19 @@ public class Input extends MouseAdapter {
 		}
 	}
 
+	/**
+	 * Gets the current position of the mouse within the game.
+	 * 
+	 * @return Current position of the mouse.
+	 */
 	public Point getCurrentMousePosition() {
 		return new Point(mouseX, mouseY);
 	}
 
+	/**
+	 * Saves the state of every key in a second array. This makes it possible to
+	 * know whether the key was already pressed in the last tick.
+	 */
 	public void tick() {
 		for (int i = 0; i < buttons.length; i++) {
 			oldButtons[i] = buttons[i];
@@ -105,6 +134,9 @@ public class Input extends MouseAdapter {
 		}
 	}
 
+	/**
+	 * Resets the state of every key.
+	 */
 	public void releaseAllKeys() {
 		for (int i = 0; i < buttons.length; i++) {
 			buttons[i] = false;
