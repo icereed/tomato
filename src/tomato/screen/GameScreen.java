@@ -7,9 +7,9 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import tomato.Camera;
+import tomato.Game;
 import tomato.GameObject;
 import tomato.Input;
-import tomato.Game;
 import tomato.entity.AbstractEntity;
 import tomato.entity.CooldownObserver;
 import tomato.entity.EntityFactory;
@@ -24,7 +24,6 @@ import tomato.screen.layer.DescriptionLayer;
 import tomato.screen.layer.FadeOutLayer;
 import tomato.screen.layer.PlayerStatsLayer;
 import tomato.trigger.GoalTrigger;
-import tomato.wall.Wall;
 
 public class GameScreen extends Screen implements LifeObserver {
 	private Camera cam;

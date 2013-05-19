@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class Window {

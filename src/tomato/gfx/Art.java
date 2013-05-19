@@ -21,6 +21,7 @@ public class Art {
 			load("title_screen_background.png"), 8);
 	public static BufferedImage background = load("background.png");
 	public static BufferedImage level1 = load("level2.png");
+	public static BufferedImage level2 = load("level1.png");
 	public static BufferedImage level1_desc = load("desc.png");
 	public static BufferedImage level_bg1 = load("level_bg1.png");
 	public static BufferedImage level_bg2 = load("level_bg2.png");

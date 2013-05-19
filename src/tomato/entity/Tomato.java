@@ -128,7 +128,7 @@ public class Tomato extends PhysicsEntity {
 
 	@Override
 	public int getType() {
-		return this.PLAYER;
+		return AbstractEntity.PLAYER;
 	}
 
 }
