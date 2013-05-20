@@ -33,9 +33,9 @@ public class PlayerLogic implements TickStrategy {
 		this.player.gun.tick(input, delta);
 
 		if (input.buttons[Input.RIGHT]) {
-			this.player.move(Tomato.RIGHT, delta);
+			this.player.move(PhysicsEntity.RIGHT, delta);
 		} else if (input.buttons[Input.LEFT]) {
-			this.player.move(Tomato.LEFT, delta);
+			this.player.move(PhysicsEntity.LEFT, delta);
 		}
 		if (/* !input.oldButtons[Input.JUMP] && */input.buttons[Input.JUMP]) {
 			this.player.jump();

@@ -118,6 +118,8 @@ public abstract class AbstractEntity implements Physicable {
 		for (TickStrategy s : tickStrategies) {
 			s.tick(input, delta);
 		}
+		// Search for intersecting chunks
+		
 	}
 
 	public boolean tryMove(double dx, double dy) {

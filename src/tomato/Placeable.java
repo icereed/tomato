@@ -43,4 +43,5 @@ public interface Placeable {
 	 * @return The bounds.
 	 */
 	public Rectangle getBounds();
+	
 }

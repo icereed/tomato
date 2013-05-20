@@ -5,6 +5,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import tomato.Camera;
 import tomato.Game;
@@ -25,7 +26,7 @@ public class Level extends GameObject implements Iterable<AbstractEntity> {
 	private GameScreen screen;
 	private int w, h;
 	private ArrayList<AbstractEntity> entities;
-	private ArrayList<Wall> walls;
+	private List<Wall> walls;
 	private ArrayList<ITrigger> triggers;
 	private WorldPhysicHandler physicHandler;
 	private EntityFactory entityFactory;
@@ -35,30 +36,34 @@ public class Level extends GameObject implements Iterable<AbstractEntity> {
 
 	public Level(int w, int h) {
 		this.screen = null;
-		this.setWidth(w);
+		this.w = w;
 		this.h = h;
 		this.entities = new ArrayList<AbstractEntity>();
-		setWalls(new ArrayList<Wall>());
+		this.walls = new ArrayList<Wall>();
 		this.physicHandler = new WorldPhysicHandler(this);
-		entityFactory = new EntityFactory(physicHandler);
-		this.setTriggers(new ArrayList<ITrigger>());
+		this.entityFactory = new EntityFactory(physicHandler);
+		this.triggers = new ArrayList<ITrigger>();
 	}
 
 	public void init() {
-		Game.levelStarted = Game.getGameInstance().getTimer().getTime();
+		Game gameInstance = Game.getGameInstance();
+		if (gameInstance != null) {
+			Game.levelStarted = Game.getGameInstance().getTimer().getTime();
+		}
 		isReady[0] = true;
 	}
 
+	/**
+	 * Removes everything from the level. Basically you have a blank level with the given width and height.
+	 * @see setWidth(), setHeight() in order to change dimensions of the level, if you want to reuse this object for another level.
+	 */
 	public void reset() {
-		if (lastSave == null) {
-			entities.clear();
-			getWalls().clear();
-			init();
-		} else {
-			player.remove();
-			player = null;
-		}
-
+		entities.clear();
+		getWalls().clear();
+		setPlayer(null);
+		getTriggers().clear();
+		isReady[0] = false;
+		isReady[1] = false;
 	}
 
 	public void add(AbstractEntity e) {
@@ -68,6 +73,14 @@ public class Level extends GameObject implements Iterable<AbstractEntity> {
 
 	public void add(Wall w) {
 		getWalls().add(w);
+	}
+
+	public void add(ITrigger trigger) {
+		getTriggers().add(trigger);
+	}
+
+	public void remove(ITrigger trigger) {
+		getTriggers().remove(trigger);
 	}
 
 	public void tick(Input input, double delta) {
@@ -102,9 +115,8 @@ public class Level extends GameObject implements Iterable<AbstractEntity> {
 
 	public void render(Graphics g, Camera cam) {
 
-		for (Iterator<AbstractEntity> iterator = entities.iterator(); iterator
-				.hasNext();) {
-			iterator.next().render(g, cam);
+		for (AbstractEntity e : entities) {
+			e.render(g, cam);
 		}
 		for (Wall wall : getWalls()) {
 			wall.render(g, cam);
@@ -120,6 +132,7 @@ public class Level extends GameObject implements Iterable<AbstractEntity> {
 			double xa, double ya, boolean horizontally) {
 		if (ya > 0 && yc >= this.h) {
 			e.die();
+			return true;
 		}
 		if (xa < 0 && xc <= 0) {
 			xa = 0;
@@ -142,7 +155,7 @@ public class Level extends GameObject implements Iterable<AbstractEntity> {
 			ww = wall.getWidth();
 			wx = wall.getX();
 			wy = wall.getY();
-			Rectangle w_bounds = new Rectangle(wx - 2, wy - 2, ww + 4, wh + 4);
+			Rectangle w_bounds = new Rectangle(wx, wy, ww, wh);
 
 			if (w_bounds.intersects(e_bounds)) {
 
@@ -169,7 +182,7 @@ public class Level extends GameObject implements Iterable<AbstractEntity> {
 							// return false;
 						}
 					}
-					ok = !collided;
+					ok = false;
 				}
 
 			}
@@ -183,8 +196,8 @@ public class Level extends GameObject implements Iterable<AbstractEntity> {
 	}
 
 	public void save() {
-		lastSave = new LevelSave(entities, getWalls(), new Point((int) player.x,
-				(int) player.y));
+		lastSave = new LevelSave(entities, getWalls(), new Point(
+				(int) player.x, (int) player.y));
 	}
 
 	@Override
@@ -218,7 +231,10 @@ public class Level extends GameObject implements Iterable<AbstractEntity> {
 			this.remove(current);
 		}
 		this.player = player;
-		this.add(player);
+		if (player != null) {
+			this.add(player);
+
+		}
 
 	}
 
@@ -230,7 +246,8 @@ public class Level extends GameObject implements Iterable<AbstractEntity> {
 	}
 
 	/**
-	 * @param w the width to set.
+	 * @param w
+	 *            the width to set.
 	 */
 	public void setWidth(int w) {
 		this.w = w;
@@ -247,28 +264,34 @@ public class Level extends GameObject implements Iterable<AbstractEntity> {
 	/**
 	 * @return the walls
 	 */
-	public ArrayList<Wall> getWalls() {
+	public List<Wall> getWalls() {
 		return walls;
 	}
 
 	/**
-	 * @param walls the walls to set
+	 * @param list
+	 *            the walls to set
 	 */
-	public void setWalls(ArrayList<Wall> walls) {
-		this.walls = walls;
+	public void setWalls(List<Wall> list) {
+		this.walls = list;
 	}
 
 	/**
 	 * @return the triggers
 	 */
-	public ArrayList<ITrigger> getTriggers() {
+	public List<ITrigger> getTriggers() {
 		return triggers;
 	}
 
 	/**
-	 * @param triggers the triggers to set
+	 * @param triggers
+	 *            the triggers to set
 	 */
 	public void setTriggers(ArrayList<ITrigger> triggers) {
 		this.triggers = triggers;
+	}
+
+	public List<AbstractEntity> getEntities() {
+		return entities;
 	}
 }

@@ -3,12 +3,13 @@ package tomato.level;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import tomato.wall.MultipleWall;
 import tomato.wall.Wall;
 
 public class WallTesselator {
-	public static ArrayList<Wall> tesselate(ArrayList<Wall> walls) {
+	public static List<Wall> tesselate(List<Wall> walls) {
 
 		Collections.sort(walls, new WallComperator());
 		ArrayList<Wall> newWall = new ArrayList<Wall>();

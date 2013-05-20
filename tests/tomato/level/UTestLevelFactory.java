@@ -8,7 +8,7 @@ public class UTestLevelFactory {
 
 	@Test
 	public void test_getLevelById() {
-		Level level = LevelFactory.getLevelById(LevelFactory.level1);
+		Level level = TestingLevelFactory.getLevelById(LevelFactory.level1);
 
 		assertNotNull(level);
 		assertTrue("There were no walls added by the factory.", level.getWalls().size() > 0);

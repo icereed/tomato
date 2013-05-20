@@ -77,7 +77,7 @@ public class Art {
 		return res;
 	}
 
-	private static BufferedImage[][] split(BufferedImage src, int xs, int ys) {
+	public static BufferedImage[][] split(BufferedImage src, int xs, int ys) {
 		final int xSlices = src.getWidth() / xs;
 		final int ySlices = src.getHeight() / ys;
 		final BufferedImage[][] res = new BufferedImage[xSlices][ySlices];
