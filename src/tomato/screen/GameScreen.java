@@ -2,7 +2,6 @@ package tomato.screen;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -10,9 +9,7 @@ import tomato.Camera;
 import tomato.Game;
 import tomato.GameObject;
 import tomato.Input;
-import tomato.entity.AbstractEntity;
 import tomato.entity.CooldownObserver;
-import tomato.entity.EntityFactory;
 import tomato.entity.LifeObserver;
 import tomato.entity.PhysicsEntity;
 import tomato.gfx.Art;
@@ -23,7 +20,6 @@ import tomato.screen.layer.ColorLayer;
 import tomato.screen.layer.DescriptionLayer;
 import tomato.screen.layer.FadeOutLayer;
 import tomato.screen.layer.PlayerStatsLayer;
-import tomato.trigger.GoalTrigger;
 
 public class GameScreen extends Screen implements LifeObserver {
 	private Camera cam;
@@ -39,12 +35,10 @@ public class GameScreen extends Screen implements LifeObserver {
 		level = LevelFactory.getLevelById(LevelFactory.level1);
 		cam = Camera.getInstance().init(Game.GAME_WIDTH, Game.GAME_HEIGHT);
 		level.init();
-		PhysicsEntity player = new EntityFactory(level.getPhysicHandler())
-				.getLivingEntityById(AbstractEntity.PLAYER, 10, 10);
+
+		PhysicsEntity player = level.getPlayer();
 		player.addObserver((CooldownObserver) statsLayer);
 		player.addObserver(this);
-		level.setPlayer(player);
-		level.getTriggers().add(new GoalTrigger(player, new Rectangle(16, -464, 80, 143)));
 
 
 		gameObjects = new ArrayList<GameObject>();

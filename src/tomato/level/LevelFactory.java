@@ -1,7 +1,13 @@
 package tomato.level;
 
+import java.awt.Rectangle;
+
 import tomato.Game;
+import tomato.entity.AbstractEntity;
+import tomato.entity.EntityFactory;
+import tomato.entity.PhysicsEntity;
 import tomato.gfx.Art;
+import tomato.trigger.GoalTrigger;
 import tomato.wall.Wall;
 
 public class LevelFactory {
@@ -12,6 +18,7 @@ public class LevelFactory {
 		int w;
 		int h;
 		Level ret;
+		PhysicsEntity player;
 		switch (id) {
 		case LevelFactory.level1:
 
@@ -26,6 +33,12 @@ public class LevelFactory {
 																	// individual
 																	// wall
 																	// tiles
+			player = new EntityFactory(ret.getPhysicHandler())
+					.getLivingEntityById(AbstractEntity.PLAYER, 10, 10);
+			ret.setPlayer(player);
+
+			ret.getTriggers().add(
+					new GoalTrigger(player, new Rectangle(16, -464, 80, 143)));
 			return ret;
 		case LevelFactory.level2:
 
@@ -40,6 +53,9 @@ public class LevelFactory {
 																	// individual
 																	// wall
 																	// tiles
+			player = new EntityFactory(ret.getPhysicHandler())
+					.getLivingEntityById(AbstractEntity.PLAYER, 10, 10);
+			ret.setPlayer(player);
 			return ret;
 		default:
 			return null;
