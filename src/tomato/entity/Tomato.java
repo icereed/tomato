@@ -90,7 +90,6 @@ public class Tomato extends PhysicsEntity {
 	@Override
 	public void die() {
 		super.die();
-		updateLifeObservers(0);
 		new PixelExplosion(level, (int) (x + 0.5 * w), (int) (y + 0.5 * h),
 				50, 4.00D, 2000, new Color(0xFF0A0E));
 		Sound.die.play();
@@ -101,8 +100,8 @@ public class Tomato extends PhysicsEntity {
 
 		cam.x = (int) Math.floor(x - 0.5 * Game.GAME_WIDTH);
 		cam.y = (int) Math.floor(y - 0.2 * Game.GAME_HEIGHT);
-		if (cam.y > 0) {
-			cam.y = 0;
+		if (cam.y > level.getHeight()-cam.height) {
+			cam.y = level.getHeight()-cam.height;
 		}
 		if (cam.x < 0) {
 			cam.x = 0;

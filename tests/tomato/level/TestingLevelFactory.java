@@ -36,11 +36,11 @@ public class TestingLevelFactory {
 		case test_level_01:
 			levelImage = TestingImages.test_level_01;
 			w = (levelImage.getWidth() * Wall.TILE_SIZE);
-			h = Game.GAME_HEIGHT;
+			h = (levelImage.getHeight() * Wall.TILE_SIZE);
 
 			ret = new Level(w, h);
 			LevelImageInterpreter.readLevel(levelImage, ret);
-			ret.setWalls(WallTesselator.tesselate(ret.getWalls())); // Shrink
+//			ret.setWalls(WallTesselator.tesselate(ret.getWalls())); // Shrink
 																	// the
 																	// amount of
 																	// individual
@@ -48,13 +48,18 @@ public class TestingLevelFactory {
 																	// tiles
 			player = new EntityFactory(ret.getPhysicHandler())
 					.getLivingEntityById(AbstractEntity.PLAYER, 10, 10);
+			
+//			for (Wall wall : ret.getWalls()) {
+//				System.out.println(wall);
+//			}
+			
 			ret.setPlayer(player);
 			ret.add(new GoalTrigger(player, new Rectangle(0, 0, 9, 9)));
 			return ret;
 		case test_level_02:
 			levelImage = TestingImages.test_level_01;
 			w = (levelImage.getWidth() * Wall.TILE_SIZE);
-			h = Game.GAME_HEIGHT;
+			h = (levelImage.getHeight() * Wall.TILE_SIZE);
 
 			ret = new Level(w, h);
 			LevelImageInterpreter.readLevel(levelImage, ret);

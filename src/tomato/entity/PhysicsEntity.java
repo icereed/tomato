@@ -83,8 +83,8 @@ public abstract class PhysicsEntity extends AbstractEntity implements
 
 	@Override
 	public void die() {
-		// TODO Auto-generated method stub
 		super.die();
+		updateLifeObservers(0);
 
 	}
 

@@ -11,6 +11,7 @@ import tomato.Camera;
 import tomato.Game;
 import tomato.GameObject;
 import tomato.Input;
+import tomato.Placeable;
 import tomato.entity.AbstractEntity;
 import tomato.entity.Bullet;
 import tomato.entity.EntityFactory;
@@ -32,6 +33,8 @@ public class Level extends GameObject implements Iterable<AbstractEntity> {
 	private EntityFactory entityFactory;
 	private LevelSave lastSave;
 	private PhysicsEntity player;
+	private List<Chunk<Placeable>> chunks;
+	private int chunkSize = 6*Wall.TILE_SIZE;
 	private boolean isReady[] = { false, false };
 
 	public Level(int w, int h) {
@@ -43,6 +46,8 @@ public class Level extends GameObject implements Iterable<AbstractEntity> {
 		this.physicHandler = new WorldPhysicHandler(this);
 		this.entityFactory = new EntityFactory(physicHandler);
 		this.triggers = new ArrayList<ITrigger>();
+		this.chunks = new ArrayList<Chunk<Placeable>>();
+		// TODO: Implement algorithm in order to initialialize the chunks.
 	}
 
 	public void init() {
