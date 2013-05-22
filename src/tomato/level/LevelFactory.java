@@ -23,7 +23,7 @@ public class LevelFactory {
 		case LevelFactory.level1:
 
 			w = (Art.level1.getWidth() * Wall.TILE_SIZE);
-			h = Game.GAME_HEIGHT;
+			h = (Art.level1.getHeight() * Wall.TILE_SIZE);
 
 			ret = new Level(w, h);
 			LevelImageInterpreter.readLevel(Art.level1, ret);
@@ -34,11 +34,12 @@ public class LevelFactory {
 																	// wall
 																	// tiles
 			player = new EntityFactory(ret.getPhysicHandler())
-					.getLivingEntityById(AbstractEntity.PLAYER, 10, 10);
+					.getLivingEntityById(AbstractEntity.PLAYER,
+							1 * Wall.TILE_SIZE, 29 * Wall.TILE_SIZE);
 			ret.setPlayer(player);
 
 			ret.getTriggers().add(
-					new GoalTrigger(player, new Rectangle(16, -464, 80, 143)));
+					new GoalTrigger(player, new Rectangle(1 * Wall.TILE_SIZE, 6 * Wall.TILE_SIZE, 5 * Wall.TILE_SIZE, 8 * Wall.TILE_SIZE)));
 			return ret;
 		case LevelFactory.level2:
 

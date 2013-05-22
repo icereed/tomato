@@ -9,28 +9,38 @@ import tomato.Input;
 
 public class Background extends GameObject {
 	private BufferedImage img;
-	private int x;
+	private int x, yOffset;
 	private double moveFactorX, moveFactorY;
 
 	public Background(BufferedImage img, double moveFactorX, double moveFactorY) {
 		this.img = img;
 		this.moveFactorX = moveFactorX;
 		this.moveFactorY = moveFactorY;
-		x  = 0;
+		yOffset = 0;
+		x = 0;
 	}
-	
-	public Background(BufferedImage img, int x, double moveFactorX, double moveFactorY) {
+
+	public Background(BufferedImage img, int x, int yOffset,
+			double moveFactorX, double moveFactorY) {
+		this(img, x, moveFactorX, moveFactorY);
+		this.yOffset = yOffset;
+	}
+
+	public Background(BufferedImage img, int x, double moveFactorX,
+			double moveFactorY) {
 		this.img = img;
 		this.moveFactorX = moveFactorX;
 		this.moveFactorY = moveFactorY;
 		this.x = x;
+		this.yOffset = 0;
 
 	}
 
 	@Override
 	public void render(Graphics g, Camera cam) {
 
-		g.drawImage(img, x + (int) -((cam.x * moveFactorX)), (int) -(cam.y * moveFactorY), null);
+		g.drawImage(img, x + (int) -((cam.x * moveFactorX)),
+				(int) (cam.y * moveFactorY) + yOffset, null);
 
 	}
 
