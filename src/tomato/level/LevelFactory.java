@@ -25,14 +25,15 @@ public class LevelFactory {
 			w = (Art.level1.getWidth() * Wall.TILE_SIZE);
 			h = (Art.level1.getHeight() * Wall.TILE_SIZE);
 
-			ret = new Level(w, h);
+			ret = new Level(w, h, 16*8);
 			LevelImageInterpreter.readLevel(Art.level1, ret);
-			ret.setWalls(WallTesselator.tesselate(ret.getWalls())); // Shrink
+			//ret.setWalls(WallTesselator.tesselate(ret.getWalls())); // Shrink
 																	// the
 																	// amount of
 																	// individual
 																	// wall
 																	// tiles
+			System.out.println("Amount of chunks: " + ret.getChunks().size());
 			player = new EntityFactory(ret.getPhysicHandler())
 					.getLivingEntityById(AbstractEntity.PLAYER,
 							1 * Wall.TILE_SIZE, 29 * Wall.TILE_SIZE);

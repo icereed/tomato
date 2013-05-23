@@ -11,9 +11,7 @@ import tomato.Camera;
 import tomato.Game;
 import tomato.GameObject;
 import tomato.Input;
-import tomato.Placeable;
 import tomato.entity.AbstractEntity;
-import tomato.entity.Bullet;
 import tomato.entity.EntityFactory;
 import tomato.entity.PhysicsEntity;
 import tomato.physics.WorldPhysicHandler;
@@ -25,7 +23,8 @@ import tomato.wall.Wall;
 public class Level extends GameObject implements Iterable<AbstractEntity> {
 	public static double GRAVITY = 1000D;
 	private GameScreen screen;
-	private int w, h;
+	private int w;
+	private int h;
 	private ArrayList<AbstractEntity> entities;
 	private List<Wall> walls;
 	private ArrayList<ITrigger> triggers;
@@ -33,8 +32,8 @@ public class Level extends GameObject implements Iterable<AbstractEntity> {
 	private EntityFactory entityFactory;
 	private LevelSave lastSave;
 	private PhysicsEntity player;
-	private List<Chunk<Placeable>> chunks;
-	private int chunkSize = 6*Wall.TILE_SIZE;
+	private List<Chunk<Wall>> wallChunks;
+	private int chunkSize;
 	private boolean isReady[] = { false, false };
 
 	public Level(int w, int h) {
@@ -46,8 +45,39 @@ public class Level extends GameObject implements Iterable<AbstractEntity> {
 		this.physicHandler = new WorldPhysicHandler(this);
 		this.entityFactory = new EntityFactory(physicHandler);
 		this.triggers = new ArrayList<ITrigger>();
-		this.chunks = new ArrayList<Chunk<Placeable>>();
+		this.wallChunks = new ArrayList<Chunk<Wall>>();
+		this.chunkSize = 8 * Wall.TILE_SIZE;
 		// TODO: Implement algorithm in order to initialialize the chunks.
+		initChunks();
+
+
+	}
+
+	public Level(int w, int h, int chunkSize) {
+		this.screen = null;
+		this.w = w;
+		this.h = h;
+		this.entities = new ArrayList<AbstractEntity>();
+		this.walls = new ArrayList<Wall>();
+		this.physicHandler = new WorldPhysicHandler(this);
+		this.entityFactory = new EntityFactory(physicHandler);
+		this.triggers = new ArrayList<ITrigger>();
+		this.wallChunks = new ArrayList<Chunk<Wall>>();
+		this.chunkSize = 8 * Wall.TILE_SIZE;
+		this.chunkSize = chunkSize;
+		
+		initChunks();
+
+	}
+	
+	private void initChunks() {
+		// Initialise the chunks.
+		for (int i = 0; i < getWidth(); i += this.chunkSize) {
+			for (int j = 0; j < getHeight(); j += this.chunkSize) {
+				this.wallChunks.add(new Chunk<Wall>(new Rectangle(i, j,
+						this.chunkSize, this.chunkSize)));
+			}
+		}
 	}
 
 	public void init() {
@@ -55,18 +85,27 @@ public class Level extends GameObject implements Iterable<AbstractEntity> {
 		if (gameInstance != null) {
 			Game.levelStarted = Game.getGameInstance().getTimer().getTime();
 		}
+
 		isReady[0] = true;
 	}
 
 	/**
-	 * Removes everything from the level. Basically you have a blank level with the given width and height.
-	 * @see setWidth(), setHeight() in order to change dimensions of the level, if you want to reuse this object for another level.
+	 * Removes everything from the level. Basically you have a blank level with
+	 * the given width and height.
+	 * 
+	 * @see setWidth(), setHeight() in order to change dimensions of the level,
+	 *      if you want to reuse this object for another level.
 	 */
 	public void reset() {
 		entities.clear();
 		getWalls().clear();
 		setPlayer(null);
 		getTriggers().clear();
+		getChunks().clear();
+		
+		
+		initChunks();
+		
 		isReady[0] = false;
 		isReady[1] = false;
 	}
@@ -78,6 +117,10 @@ public class Level extends GameObject implements Iterable<AbstractEntity> {
 
 	public void add(Wall w) {
 		getWalls().add(w);
+
+		for (Chunk<Wall> chunk : wallChunks) {
+			chunk.add(w);
+		}
 	}
 
 	public void add(ITrigger trigger) {
@@ -126,78 +169,6 @@ public class Level extends GameObject implements Iterable<AbstractEntity> {
 		for (Wall wall : getWalls()) {
 			wall.render(g, cam);
 		}
-	}
-
-	public boolean isFree(AbstractEntity entity) {
-		return isFree(entity, entity.x, entity.y, entity.w, entity.h,
-				entity.xa, entity.ya, false);
-	}
-
-	public boolean isFree(AbstractEntity e, double xc, double yc, int w, int h,
-			double xa, double ya, boolean horizontally) {
-		if (ya > 0 && yc >= this.h) {
-			e.die();
-			return true;
-		}
-		if (xa < 0 && xc <= 0) {
-			xa = 0;
-			return false;
-		}
-		if (xc + w > this.getWidth() && xa > 0) {
-			xa = 0;
-			return false;
-		}
-		boolean ok = true;
-		// yc++;
-		Rectangle e_bounds = new Rectangle((int) Math.floor(xc - 10),
-				(int) Math.floor(yc - 5), w + 10, h + 10);
-
-		int wh, ww, wx, wy;
-		boolean moveUp = false;
-		for (Wall wall : getWalls()) {
-
-			wh = wall.getHeight();
-			ww = wall.getWidth();
-			wx = wall.getX();
-			wy = wall.getY();
-			Rectangle w_bounds = new Rectangle(wx, wy, ww, wh);
-
-			if (w_bounds.intersects(e_bounds)) {
-
-				boolean collided = false;
-				if (e != null
-						&& (collided = WorldPhysicHandler.isPixelCollide(
-								e.getSprite(), xc, yc, wall.getSprite(), wx,
-								wy, 200))) {
-
-					if (horizontally) {
-						if (!WorldPhysicHandler.isPixelCollide(e.getSprite(),
-								xc, yc - 1, wall.getSprite(), wx, wy, 200)) {
-							moveUp = true;
-						} else {
-							moveUp = false;
-						}
-					}
-
-					if (e.getType() == AbstractEntity.BULLET) {
-						wall.gotShot((Bullet) e);
-					} else {
-						wall.gotTouched(e);
-						if (wall.getType() == Wall.GROUND_SPIKES) {
-							// return false;
-						}
-					}
-					ok = false;
-				}
-
-			}
-		}
-		if (moveUp) {
-			e.y--;
-			e.ya -= 35;
-		}
-
-		return ok || moveUp;
 	}
 
 	public void save() {
@@ -298,5 +269,13 @@ public class Level extends GameObject implements Iterable<AbstractEntity> {
 
 	public List<AbstractEntity> getEntities() {
 		return entities;
+	}
+
+	public List<Chunk<Wall>> getChunks() {
+		return wallChunks;
+	}
+
+	public void setChunks(List<Chunk<Wall>> chunks) {
+		this.wallChunks = chunks;
 	}
 }

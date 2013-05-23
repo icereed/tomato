@@ -2,7 +2,6 @@ package tomato.level;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
 
 import java.awt.Point;
 
@@ -44,36 +43,48 @@ public class UTestLevel {
 
 	@Test
 	public void testAddWall() {
-		Level l = new Level(10, 10);
-		Wall w = WallFactory.getWallById(Wall.BRICK, 0, 0, l);
-		l.add(w);
-		assertEquals(1, l.getWalls().size());
-		assertEquals(w, l.getWalls().get(0));
+		int w, h;
+		w = 5;
+		h = 5;
+
+		Level l = new Level(w * Wall.TILE_SIZE, h * Wall.TILE_SIZE);
+		l.init();
+		
+		Wall wall = null;
+
+		int amountAdded = 0;
+
+		for (int i = 0; i < w; i++) {
+			for (int j = 0; j < h; j++) {
+				wall = WallFactory.getWallById(Wall.BRICK, i * Wall.TILE_SIZE,
+						j * Wall.TILE_SIZE, l);
+				l.add(wall);
+				amountAdded++;
+			}
+
+		}
+
+		assertEquals(amountAdded, l.getWalls().size());
+		
+		int amountInChunks = 0;
+		
+		for (Chunk<Wall> chunk : l.getChunks()) {
+			amountInChunks += chunk.getContent().size();
+		}
+		
+		assertEquals(amountAdded, amountInChunks);
+
 	}
 
 	@Test
-	public void testIsFree() {
-
+	public void testChunkInit() {
 		Level l = TestingLevelFactory
 				.getLevelById(TestingLevelFactory.test_level_02);
-		AbstractEntity entity = new TestingEntityFactory(l)
-				.getTestingEntityById(TestingEntityFactory.testEntity, 0, 0);
-		Point[] positions = { new Point(0, 0),
-				new Point(0, 15 * Wall.TILE_SIZE),
-				new Point(0, 16 * Wall.TILE_SIZE),
-				new Point(0, (15 * Wall.TILE_SIZE) + 7) };
-		boolean[] expected = { true, true, false };
-		// TODO: Add cases.
-		for (int i = 0; i < expected.length; i++) {
-			entity.x = positions[i].x;
-			entity.y = positions[i].y;
 
-			assertEquals("Level should " + ((!expected[i]) ? "not " : "")
-					+ "be free at x=" + positions[i].x + " y=" + positions[i].y
-					+ ".", expected[i], l.isFree(entity, entity.x, entity.y,
-					entity.w, entity.h, entity.xa, entity.ya, false));
-		}
+		assertEquals(12, l.getChunks().size());
 	}
+
+
 
 	@Test
 	public void testRemoveAbstractEntity() {

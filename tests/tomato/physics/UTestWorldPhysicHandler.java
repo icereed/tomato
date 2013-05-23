@@ -9,7 +9,12 @@ import java.awt.image.BufferedImage;
 import org.junit.Before;
 import org.junit.Test;
 
+import tomato.entity.AbstractEntity;
+import tomato.entity.TestingEntityFactory;
+import tomato.level.Level;
+import tomato.level.TestingLevelFactory;
 import tomato.physics.WorldPhysicHandler;
+import tomato.wall.Wall;
 
 public class UTestWorldPhysicHandler {
 	private BufferedImage[] image;
@@ -57,6 +62,30 @@ public class UTestWorldPhysicHandler {
 
 				throw e;
 			}
+		}
+	}
+	
+	@Test
+	public void testCheckCollision() {
+
+		Level l = TestingLevelFactory
+				.getLevelById(TestingLevelFactory.test_level_02);
+		AbstractEntity entity = new TestingEntityFactory(l)
+				.getTestingEntityById(TestingEntityFactory.testEntity, 0, 0);
+		Point[] positions = { new Point(0, 0),
+				new Point(0, 15 * Wall.TILE_SIZE),
+				new Point(0, 16 * Wall.TILE_SIZE),
+				new Point(0, (15 * Wall.TILE_SIZE) + 7) };
+		boolean[] expected = { true, true, false };
+		// TODO: Add cases.
+		for (int i = 0; i < expected.length; i++) {
+			entity.x = positions[i].x;
+			entity.y = positions[i].y;
+
+			assertEquals("Level should " + ((!expected[i]) ? "not " : "")
+					+ "be free at x=" + positions[i].x + " y=" + positions[i].y
+					+ ".", expected[i], l.getPhysicHandler().checkCollision(l, entity, entity.x, entity.y,
+					entity.w, entity.h, entity.xa, entity.ya, false));
 		}
 	}
 

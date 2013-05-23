@@ -5,9 +5,8 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import tomato.Camera;
-import tomato.Input;
-import tomato.entity.Bullet;
 import tomato.entity.AbstractEntity;
+import tomato.entity.Bullet;
 import tomato.level.Level;
 
 public abstract class AbstractWall implements Wall {

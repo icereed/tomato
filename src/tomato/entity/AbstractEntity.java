@@ -130,7 +130,7 @@ public abstract class AbstractEntity implements Physicable {
 	public boolean tryMoveVertical(double dy) {
 		boolean ok = true;
 		this.onGround = false;
-		if (this.level.isFree(this, this.x, this.y + dy, this.w, this.h,
+		if (this.level.getPhysicHandler().checkCollision(level, this, this.x, this.y + dy, this.w, this.h,
 				this.xa, this.ya, false)) {
 			this.y += dy;
 		} else {
@@ -158,7 +158,7 @@ public abstract class AbstractEntity implements Physicable {
 
 	public boolean tryMoveHorizontal(double dx) {
 		boolean ok = true;
-		if (this.level.isFree(this, this.x + dx, this.y, this.w, this.h,
+		if (this.level.getPhysicHandler().checkCollision(level, this, this.x + dx, this.y, this.w, this.h,
 				this.xa, this.ya, true)) {
 			this.x += dx;
 
