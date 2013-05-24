@@ -42,8 +42,8 @@ public class WallTesselator {
 				Wall lastEntry;
 				if (toDelete.size() > 0) {
 					lastEntry = toDelete.get(toDelete.size() - 1);
-					Wall multiWall = new MultipleWall(lastEntry.getX(),
-							lastEntry.getY(), toDelete.size(), 1, lastEntry);
+					Wall multiWall = new MultipleWall((int) lastEntry.getX(),
+							(int) lastEntry.getY(), toDelete.size(), 1, lastEntry);
 					// System.out.println(multiWall);
 					newWall.add(multiWall);
 					toDelete.clear();

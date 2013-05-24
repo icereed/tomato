@@ -23,6 +23,14 @@ public abstract class PhysicsEntity extends AbstractEntity implements
 	private ArrayList<EntityCommand> list;
 	protected Gun gun;
 	private double invulnerable;
+	/**
+	 * Is used to add the horizontal movement, which is invoked by boolean
+	 * move(int direction, double delta), to the general movement, which is
+	 * processed in tryMove().
+	 * 
+	 * @see public boolean move(int direction, double delta)
+	 */
+	private double tickHorizontalMovement = 0D;
 	private List<LifeObserver> lifeObservers;
 	private List<CooldownObserver> cooldownObservers;
 
@@ -69,8 +77,9 @@ public abstract class PhysicsEntity extends AbstractEntity implements
 	@Override
 	public void afterTick(double delta) {
 		super.afterTick(delta);
+		tryMove((xa * delta) + tickHorizontalMovement, ya * delta);
 		brake(delta);
-		tryMove(xa * delta, ya * delta);
+		tickHorizontalMovement = 0.0;
 	}
 
 	@Override
@@ -88,14 +97,14 @@ public abstract class PhysicsEntity extends AbstractEntity implements
 
 	}
 
-	public boolean move(int direction, double delta) {
+	public void move(int direction, double delta) {
 		if (direction == LEFT && xa > -walkspeed || direction == RIGHT
 				&& xa < walkspeed) {
 			xa = xa + (direction == LEFT ? -1 : 1)
 					* (walkspeed * (onGround ? 1 : 0.5) * 10 * delta);
 		}
 		faceRight = direction == RIGHT;
-		return tryMoveHorizontal(xa * delta);
+		tickHorizontalMovement += xa * delta;
 	}
 
 	public void brake(double delta) {

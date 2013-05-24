@@ -16,6 +16,11 @@ import tomato.wall.Wall;
 public class WorldPhysicHandler {
 	private ArrayList<AbstractEntity> entities;
 	private Level level;
+	public static final byte noMovementAllowed = 0;
+	public static final byte allowedMovementVertically = 1;
+	public static final byte allowedMovementHorizontally = 2;
+	public static final byte noCollision = 4;
+	public static final byte entityDies = 8;
 
 	public WorldPhysicHandler(Level level) {
 		entities = new ArrayList<AbstractEntity>();
@@ -38,55 +43,153 @@ public class WorldPhysicHandler {
 		entities.remove(e);
 	}
 
-	public boolean checkCollision(Level level, AbstractEntity e, double xc, double yc, int w, int h, double xa, double ya, boolean horizontally) {
-		if (ya > 0 && yc >= level.getHeight()) {
-			e.die();
-			return true;
+	/**
+	 * Checks for collisions of the entity e in the given Level level for the
+	 * given delta-movements dx and dy.
+	 * 
+	 * @param level
+	 *            Level of the entity to be checked
+	 * @param e
+	 *            A entity, which is about to get checked fo collisions
+	 * @param dx
+	 *            Delta x movement. Positive means right.
+	 * @param dy
+	 *            Delta y movement. Positive means down.
+	 * @return Byte as a bit-pattern. If a certain bit is set:<br>
+	 *         Bit 0 (2^0 = 1): The entity e is allowed to move vertically. <br>
+	 *         Bit 1 (2^1 = 2): The entity e is allowed to move horizontally. <br>
+	 *         Bit 2 (2^2 = 4): No collision at all. <br>
+	 *         Bit 4 (2^3 = 8): Entity e has to die, because it would leave the
+	 *         level on the bottom. <br>
+	 *         Rest: No value yet.
+	 */
+	public byte checkCollision(Level level, AbstractEntity e, double dx,
+			double dy) {
+		byte ret = 0;
+		double dx_given = dx;
+		double dy_given = dy;
+		boolean hasToMoveUp = false;
+		boolean entityTouchesSides = false; /*
+											 * If true, then the entity is about
+											 * to leave the level to the left or
+											 * to the right. Thus, he is not
+											 * allowed to move horizontally.
+											 */
+
+		/* Check, if the entity is about to leave the level... */
+
+		// ... on the bottom (entity dies then)
+		if (dy > 0 && e.getY() >= level.getHeight()) {
+			return entityDies;
 		}
-		if (xa < 0 && xc <= 0) {
-			xa = 0;
-			return false;
+		// ... on the left
+		if (dx < 0 && e.getX() <= 0) {
+			dx = 0;
+			entityTouchesSides = true;
 		}
-		if (xc + w > level.getWidth() && xa > 0) {
-			xa = 0;
-			return false;
+		// ... on the right
+		if (e.getY() + e.getWidth() > level.getWidth() && dx > 0) {
+			dx = 0;
+			entityTouchesSides = true;
 		}
-		boolean ok = true;
-		// yc++;
-		Rectangle e_bounds = new Rectangle((int) Math.floor(xc - 5),
-				(int) Math.floor(yc - 5), w + 10, h + 10);
-	
-		int wh, ww, wx, wy;
-		boolean moveUp = false;
+
+		/* Initialise a rectangle which represents the possible movements. */
+
+		// Dimensions have 1px additionally to avoid rounding failures. Just to
+		// be safe...
+		int widthOfMovementBounds = (int) Math
+				.ceil(e.getWidth() + Math.abs(dx));
+		int heightOfMovementBounds = (int) Math.ceil(e.getHeight()
+				+ Math.abs(dy));
+
+		double x_new = e.getX();
+		// Now we calculate the coordinates of the bounds.
+		double y_new = e.getY();
+		if (dx < 0) {
+			x_new = x_new + dx;
+		}
+
+		if (dy < 0) {
+			y_new = y_new + dy;
+		}
+
+		Rectangle entityMovementBounds = new Rectangle((int) x_new - 1,
+				(int) y_new - 1, widthOfMovementBounds + 1,
+				heightOfMovementBounds + 1);
+
+		/*
+		 * Now we go through every single chunk and determine, if the
+		 * entityMovementBounds intersect with certain chunks.
+		 */
+		int wh, ww, wx, wy; // Datas of a single wall. Used for faster access.
 		for (Chunk<Wall> chunk : level.getChunks()) {
-			if (chunk.getBounds().intersects(e_bounds)) {
+			if (chunk.getBounds().intersects(entityMovementBounds)) {
 				for (Wall wall : chunk.getContent()) {
-	
+
 					wh = wall.getHeight();
 					ww = wall.getWidth();
-					wx = wall.getX();
-					wy = wall.getY();
-					Rectangle w_bounds = new Rectangle(wx, wy, ww, wh);
-	
-					if (w_bounds.intersects(e_bounds)) {
-	
-						boolean collided = false;
-						if (e != null
-								&& (collided = WorldPhysicHandler
-										.isPixelCollide(e.getSprite(), xc, yc,
-												wall.getSprite(), wx, wy, 200))) {
-	
-							if (horizontally) {
-								// We check, if we have to move the entity 1px up
-								if (!WorldPhysicHandler.isPixelCollide(
-										e.getSprite(), xc, yc - 1,
-										wall.getSprite(), wx, wy, 200)) {
-									moveUp = true;
-								} else {
-									moveUp = false;
-								}
+					wx = (int) wall.getX();
+					wy = (int) wall.getY();
+					Rectangle wallBounds = wall.getBounds();
+
+					if (wallBounds.intersects(entityMovementBounds)) {
+
+						// First we check diagonal movement. If needed, we check
+						// vertical movement and then horizontal separately.
+
+						Rectangle movedBounds = new Rectangle(e.getBounds());
+						movedBounds.y = (int) (e.getY() + dy);
+						movedBounds.x = (int) (e.getX() + dx);
+
+						if (wallBounds.intersects(movedBounds)
+								&& isPixelCollide(e.getSprite(), movedBounds.x,
+										movedBounds.y, wall.getSprite(),
+										wall.getX(), wall.getY(), 200)) {
+							// Can't move without restrictions
+							// Now we check, if necessery, the vertical movement
+							// and then horizontal separately.
+
+							if (dx == 0.0) { // If dx is already 0.0, then
+								// collision is caused by dy
+								dy = 0.0;
+							} else if (dy == 0.0) { // If dy is already 0.0,
+								// then the collision is
+								// caused by dx
+
+								dx = 0.0;
 							}
-	
+
+							// If dx and dy are not yet 0.0, we have to look
+							// closer to the collision.
+							// Now we have to check the bounds
+							Rectangle movedVerticalBounds = new Rectangle(
+									e.getBounds());
+							movedVerticalBounds.y = (int) (e.getY() + dy);
+
+							if (wallBounds.intersects(movedVerticalBounds)
+									&& isPixelCollide(e.getSprite(),
+											movedVerticalBounds.x,
+											movedVerticalBounds.y,
+											wall.getSprite(), wall.getX(),
+											wall.getY(), 200)) {
+								// Entity collides vertically
+								dy = 0.0;
+							}
+
+							Rectangle movedHorizontalBounds = new Rectangle(
+									e.getBounds());
+							movedHorizontalBounds.x = (int) (e.getX() + dx);
+
+							if (wallBounds.intersects(movedHorizontalBounds)
+									&& isPixelCollide(e.getSprite(),
+											movedHorizontalBounds.x,
+											movedHorizontalBounds.y,
+											wall.getSprite(), wall.getX(),
+											wall.getY(), 200)) {
+								// Entity collides horizontally
+								dx = 0.0;
+
+							}
 							if (e.getType() == AbstractEntity.BULLET) {
 								wall.gotShot((Bullet) e);
 							} else {
@@ -95,25 +198,29 @@ public class WorldPhysicHandler {
 									// return false;
 								}
 							}
-							ok = false;
+							// }
+						} else {
+							// Entity could move with no restrictions
 						}
-	
+
 					}
+
 				}
 			}
-		}
-	
-		if (moveUp) {
-			e.y--;
-			e.ya -= 35;
-		}
-	
-		return ok;
-	}
 
-	public boolean checkCollision(Level level, AbstractEntity entity) {
-		return checkCollision(level, entity, entity.x, entity.y, entity.w, entity.h,
-				entity.xa, entity.ya, false);
+		}
+
+		if (dx == dx_given) {
+			ret = (byte) (ret | allowedMovementHorizontally);
+		}
+		if (dy == dy_given) {
+			ret = (byte) (ret | allowedMovementVertically);
+		}
+		if (dx == dx_given && dy == dy_given) {
+			ret = (byte) (ret | noCollision);
+		}
+
+		return ret;
 	}
 
 	public static boolean isPixelCollide(BufferedImage image1, double x1,

@@ -67,12 +67,12 @@ public class Chunk<E extends Placeable> implements Placeable, Iterable<E> {
 	}
 
 	@Override
-	public int getX() {
+	public double getX() {
 		return (int) bounds.getX();
 	}
 
 	@Override
-	public int getY() {
+	public double getY() {
 		return (int) bounds.getX();
 	}
 

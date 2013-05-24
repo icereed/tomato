@@ -41,8 +41,8 @@ public class Vec2D implements IVec2D {
 		return to.substract(this);
 	}
 
-	public double skalarProduct(Vec2D v) {
-		return x * v.getX() + y + v.getY();
+	public double pointProduct(Vec2D v) {
+		return x * v.getX() + y * v.getY();
 	}
 
 	public Vec2D substract(Vec2D v) {

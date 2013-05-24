@@ -50,12 +50,12 @@ public class MultipleWall implements Wall {
 	}
 
 	@Override
-	public int getX() {
+	public double getX() {
 		return x;
 	}
 
 	@Override
-	public int getY() {
+	public double getY() {
 		// TODO Auto-generated method stub
 		return y;
 	}

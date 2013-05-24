@@ -119,19 +119,38 @@ public abstract class AbstractEntity implements Physicable {
 			s.tick(input, delta);
 		}
 		// Search for intersecting chunks
-		
+
 	}
 
 	public boolean tryMove(double dx, double dy) {
 
-		return tryMoveHorizontal(dx) && tryMoveVertical(dy);
-	}
+		byte ret = this.level.getPhysicHandler().checkCollision(level, this,
+				dx, dy);
 
-	public boolean tryMoveVertical(double dy) {
-		boolean ok = true;
+		if ((ret & WorldPhysicHandler.entityDies) != 0) {
+			this.die();
+			return false;
+		}
+		boolean moveUp = false;
+		if ((ret & WorldPhysicHandler.allowedMovementHorizontally) == 0) {
+			// If the entity isn't allowed to move horizontally, we check, if we
+			// simply have to move 1px up.
+
+			this.y -= 1;
+			moveUp = (WorldPhysicHandler.allowedMovementHorizontally & level
+					.getPhysicHandler().checkCollision(level, this, dx, dy)) != 0;
+
+			if (moveUp) {
+				ret = (byte) (WorldPhysicHandler.allowedMovementHorizontally | ret);
+				this.ya -= 35;
+			} else {
+				this.y += 1;
+			}
+		}
+
+		boolean vertical = true;
 		this.onGround = false;
-		if (this.level.getPhysicHandler().checkCollision(level, this, this.x, this.y + dy, this.w, this.h,
-				this.xa, this.ya, false)) {
+		if ((ret & WorldPhysicHandler.allowedMovementVertically) != 0) {
 			this.y += dy;
 		} else {
 			if (ya >= 0) {
@@ -144,32 +163,25 @@ public abstract class AbstractEntity implements Physicable {
 			this.ya = -this.ya * bounce;
 
 			this.y -= dy * bounce;
-			ok = false;
+			vertical = false;
 		}
 		if (this.y + this.h > this.level.getHeight()) {
 			this.ya = 0;
 			this.onGround = true;
-			ok = false;
+			vertical = false;
 		}
 
-		return ok;
-
-	}
-
-	public boolean tryMoveHorizontal(double dx) {
-		boolean ok = true;
-		if (this.level.getPhysicHandler().checkCollision(level, this, this.x + dx, this.y, this.w, this.h,
-				this.xa, this.ya, true)) {
+		boolean horizontal = true;
+		if ((ret & WorldPhysicHandler.allowedMovementHorizontally) != 0) {
 			this.x += dx;
-
 		} else {
+
 			this.xa = -this.xa * bounce;
 			this.x -= dx * bounce;
-			ok = false;
+			horizontal = false;
 		}
 
-		return ok;
-
+		return vertical && horizontal;
 	}
 
 	public void walkLeft() {
@@ -185,8 +197,8 @@ public abstract class AbstractEntity implements Physicable {
 	public boolean intersects(AbstractEntity o) {
 		return o.getBounds().intersects(getBounds())
 				&& o != this
-				&& WorldPhysicHandler.isPixelCollide(getSprite(), x, y, o.getSprite(),
-						o.x, o.y, 10);
+				&& WorldPhysicHandler.isPixelCollide(getSprite(), x, y,
+						o.getSprite(), o.x, o.y, 10);
 	}
 
 	public void addTickStrategy(TickStrategy s) {
@@ -210,13 +222,13 @@ public abstract class AbstractEntity implements Physicable {
 	}
 
 	@Override
-	public int getX() {
-		return (int) this.x;
+	public double getX() {
+		return this.x;
 	}
 
 	@Override
-	public int getY() {
-		return (int) this.y;
+	public double getY() {
+		return this.y;
 	}
 
 	@Override
@@ -228,6 +240,5 @@ public abstract class AbstractEntity implements Physicable {
 	public int getHeight() {
 		return this.h;
 	}
-	
-	
+
 }

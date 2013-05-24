@@ -10,7 +10,7 @@ public interface IVec2D {
 
 	public Vec2D getConnectionVector(Vec2D to);
 
-	public double skalarProduct(Vec2D v);
+	public double pointProduct(Vec2D v);
 
 	public Vec2D substract(Vec2D v);
 

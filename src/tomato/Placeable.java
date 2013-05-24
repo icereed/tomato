@@ -13,14 +13,14 @@ public interface Placeable {
 	 * 
 	 * @return The x-coordinate.
 	 */
-	public int getX();
+	public double getX();
 
 	/**
 	 * Gets the y-coordinate of the placable object.
 	 * 
 	 * @return The y-coordinate.
 	 */
-	public int getY();
+	public double getY();
 
 	/**
 	 * Gets the width of the placable object.

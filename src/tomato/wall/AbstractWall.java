@@ -44,18 +44,18 @@ public abstract class AbstractWall implements Wall {
 	}
 
 	@Override
-	public int getX() {
-		return (int) bounds.getX();
+	public double getX() {
+		return bounds.getX();
 	}
 
 	@Override
-	public int getY() {
-		return (int) bounds.getY();
+	public double getY() {
+		return bounds.getY();
 	}
 
 	@Override
 	public void render(Graphics g, Camera cam) {
-		g.drawImage(sprite, getX() - cam.x, getY() - cam.y, null);
+		g.drawImage(sprite, bounds.x - cam.x, bounds.y - cam.y, null);
 	}
 
 	@Override
