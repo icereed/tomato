@@ -33,7 +33,10 @@ public class Vec2D implements IVec2D {
 		return new Vec2D(x + v.getX(), y + v.getY());
 	}
 
-	public Vec2D multiply(double factor) {
+	/* (non-Javadoc)
+	 * @see tomato.IVec2D#multiply(double)
+	 */
+	public IVec2D multiply(double factor) {
 		return new Vec2D(x * factor, y * factor);
 	}
 

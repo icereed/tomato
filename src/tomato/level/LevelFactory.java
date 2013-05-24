@@ -27,7 +27,7 @@ public class LevelFactory {
 
 			ret = new Level(w, h, 16*8);
 			LevelImageInterpreter.readLevel(Art.level1, ret);
-			//ret.setWalls(WallTesselator.tesselate(ret.getWalls())); // Shrink
+			ret.setWalls(WallTesselator.tesselate(ret.getWalls())); // Shrink
 																	// the
 																	// amount of
 																	// individual
