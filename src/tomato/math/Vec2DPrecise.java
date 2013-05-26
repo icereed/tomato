@@ -1,24 +1,24 @@
-package tomato;
+package tomato.math;
 
 import java.awt.Point;
 
-public class Vec2D implements IVec2D {
+public class Vec2DPrecise implements IVec2D {
 
 	private double x, y;
 	private double length = 0;
 	private boolean isSetLength = false;
 
-	public Vec2D(double x, double y) {
+	public Vec2DPrecise(double x, double y) {
 		this.x = x;
 		this.y = y;
 	}
 
-	public Vec2D(double x1, double y1, double x2, double y2) {
+	public Vec2DPrecise(double x1, double y1, double x2, double y2) {
 		this.x = x2 - x1;
 		this.y = y2 - y1;
 	}
 
-	public Vec2D(Point p1, Point p2) {
+	public Vec2DPrecise(Point p1, Point p2) {
 		this(p1.x, p1.y, p2.x, p2.y);
 	}
 
@@ -29,35 +29,35 @@ public class Vec2D implements IVec2D {
 		return length;
 	}
 
-	public Vec2D addition(Vec2D v) {
-		return new Vec2D(x + v.getX(), y + v.getY());
+	public IVec2D addition(IVec2D v) {
+		return new Vec2DPrecise(x + v.getX(), y + v.getY());
 	}
 
 	/* (non-Javadoc)
 	 * @see tomato.IVec2D#multiply(double)
 	 */
 	public IVec2D multiply(double factor) {
-		return new Vec2D(x * factor, y * factor);
+		return new Vec2DPrecise(x * factor, y * factor);
 	}
 
-	public Vec2D getConnectionVector(Vec2D to) {
+	public IVec2D getConnectionVector(IVec2D to) {
 		return to.substract(this);
 	}
 
-	public double pointProduct(Vec2D v) {
+	public double pointProduct(IVec2D v) {
 		return x * v.getX() + y * v.getY();
 	}
 
-	public Vec2D substract(Vec2D v) {
-		return new Vec2D(x - v.getX(), y - v.getY());
+	public IVec2D substract(IVec2D v) {
+		return new Vec2DPrecise(x - v.getX(), y - v.getY());
 	}
 
-	public Vec2D getUnitVector() {
+	public IVec2D getUnitVector() {
 		double unitX, unitY;
 		double lenght = getLength();
 		unitX = x / lenght;
 		unitY = y / lenght;
-		return new Vec2D(unitX, unitY);
+		return new Vec2DPrecise(unitX, unitY);
 	}
 
 	public double getX() {

@@ -8,7 +8,6 @@ import java.util.List;
 import tomato.Camera;
 import tomato.Input;
 import tomato.entity.commands.EntityCommand;
-import tomato.entity.commands.GoToXCommand;
 import tomato.entity.commands.WaitCommand;
 import tomato.item.Gun;
 import tomato.item.NullGun;
@@ -134,10 +133,6 @@ public abstract class PhysicsEntity extends AbstractEntity implements
 
 	public void wait(double time) {
 		list.add(new WaitCommand(time));
-	}
-
-	public void walkToX(int x) {
-		list.add(new GoToXCommand(this, x));
 	}
 
 	public void setInvulnerable(double invulnerable) {

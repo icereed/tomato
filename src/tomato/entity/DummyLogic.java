@@ -22,7 +22,7 @@ final class DummyLogic implements TickStrategy {
 		if (this.dummy.getCommands().isEmpty()) {
 			double ran = Math.random();
 			if (ran >= 0.5) {
-				this.dummy.walkToX((int) (Math.random() * this.dummy.level.getWidth()));
+				//this.dummy.walkToX((int) (Math.random() * this.dummy.level.getWidth()));
 			} else {
 				this.dummy.wait(Math.random() * 0.4);
 			}

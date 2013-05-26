@@ -1,10 +1,10 @@
-package tomato;
+package tomato.math;
 
 public interface IVec2D {
 	
 	public double getLength();
 
-	public Vec2D addition(Vec2D v);
+	public IVec2D addition(IVec2D v);
 
 	/**
 	 * Returns a new IVec2D, which is the current IVec2D multiplied with a factor.
@@ -13,13 +13,13 @@ public interface IVec2D {
 	 */
 	public IVec2D multiply(double factor);
 
-	public Vec2D getConnectionVector(Vec2D to);
+	public IVec2D getConnectionVector(IVec2D b);
 
-	public double pointProduct(Vec2D v);
+	public double pointProduct(IVec2D v);
 
-	public Vec2D substract(Vec2D v);
+	public IVec2D substract(IVec2D v);
 
-	public Vec2D getUnitVector();
+	public IVec2D getUnitVector();
 
 	public double getX();
 

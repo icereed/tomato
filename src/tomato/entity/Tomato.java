@@ -9,10 +9,11 @@ import tomato.Game;
 import tomato.Input;
 import tomato.PixelExplosion;
 import tomato.TickStrategy;
-import tomato.Vec2D;
 import tomato.gfx.Art;
 import tomato.item.PlayerGun;
 import tomato.level.Level;
+import tomato.math.IVec2D;
+import tomato.math.Vec2DPrecise;
 import tomato.physics.WorldPhysicHandler;
 import tomato.sound.Sound;
 
@@ -71,11 +72,11 @@ public class Tomato extends PhysicsEntity {
 				die();
 			}
 
-			Vec2D P = new Vec2D(x + 0.5D * w, y + 0.5 * h);
-			Vec2D F = new Vec2D(from.x + 0.5D * from.w, from.y + 0.5 * from.h);
+			IVec2D P = new Vec2DPrecise(x + 0.5D * w, y + 0.5 * h);
+			IVec2D F = new Vec2DPrecise(from.x + 0.5D * from.w, from.y + 0.5 * from.h);
 
-			Vec2D PF = F.substract(P);
-			Vec2D unitVector = PF.getUnitVector();
+			IVec2D PF = F.substract(P);
+			IVec2D unitVector = PF.getUnitVector();
 
 			xa -= walkspeed * unitVector.getX();
 
@@ -91,7 +92,7 @@ public class Tomato extends PhysicsEntity {
 	public void die() {
 		super.die();
 		new PixelExplosion(level, (int) (x + 0.5 * w), (int) (y + 0.5 * h),
-				100, 4.00D, 2000, new Color(0xFF0A0E));
+				250, 4.00D, 2000, new Color(0xFF0A0E));
 		Sound.die.play();
 	}
 

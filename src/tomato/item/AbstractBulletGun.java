@@ -1,10 +1,10 @@
 package tomato.item;
 
 import tomato.Input;
-import tomato.Vec2D;
 import tomato.entity.Bullet;
 import tomato.entity.PhysicsEntity;
 import tomato.level.Level;
+import tomato.math.IVec2D;
 import tomato.sound.Sound;
 
 public abstract class AbstractBulletGun implements Gun {
@@ -48,7 +48,7 @@ public abstract class AbstractBulletGun implements Gun {
 
 	}
 
-	public void shoot(Vec2D unitvector) {
+	public void shoot(IVec2D unitvector) {
 		if (ammo >= 1 && cooldown + cooldownCost >= cooldownCost) {
 			level.add(new Bullet(level.getPhysicHandler(), e.x + e.w / 2, e.y
 					+ e.h / 2, unitvector.getX() * 800,

@@ -9,8 +9,9 @@ import java.util.Random;
 import tomato.Camera;
 import tomato.Input;
 import tomato.TickStrategy;
-import tomato.Vec2D;
 import tomato.level.Level;
+import tomato.math.IVec2D;
+import tomato.math.Vec2DPrecise;
 import tomato.physics.Physicable;
 import tomato.physics.WorldPhysicHandler;
 
@@ -82,8 +83,8 @@ public abstract class AbstractEntity implements Physicable {
 
 	public abstract int getType();
 
-	public Vec2D getVectorTo(double x2, double y2) {
-		return new Vec2D(x2 - this.x, y2 - this.y);
+	public Vec2DPrecise getVectorTo(double x2, double y2) {
+		return new Vec2DPrecise(x2 - this.x, y2 - this.y);
 	}
 
 	public void init(Level level) {
@@ -205,10 +206,10 @@ public abstract class AbstractEntity implements Physicable {
 		tickStrategies.add(s);
 	}
 
-	public Vec2D getConnectionVectorTo(AbstractEntity to) {
+	public IVec2D getConnectionVectorTo(AbstractEntity to) {
 
-		Vec2D F = new Vec2D(x + w * 0.5, y + h * 0.5);
-		Vec2D T = new Vec2D(to.x + to.w * 0.5, to.y + to.h * 0.5);
+		Vec2DPrecise F = new Vec2DPrecise(x + w * 0.5, y + h * 0.5);
+		Vec2DPrecise T = new Vec2DPrecise(to.x + to.w * 0.5, to.y + to.h * 0.5);
 
 		return F.getConnectionVector(T);
 	}
