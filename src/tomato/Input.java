@@ -21,6 +21,8 @@ public class Input extends MouseAdapter {
 
 	public static final int SAVE = 9;
 
+	public static final int PAUSE = 10;
+
 	public int mouseX, mouseY;
 
 	public boolean[] buttons = new boolean[64];
@@ -86,6 +88,9 @@ public class Input extends MouseAdapter {
 		if (key == KeyEvent.VK_F1)
 			button = SAVE;
 
+		if (key == KeyEvent.VK_P || key == KeyEvent.VK_PAUSE)
+			button = PAUSE;
+		
 		if (button >= 0) {
 			buttons[button] = down;
 		}

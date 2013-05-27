@@ -2,6 +2,8 @@ package tomato.screen;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -19,6 +21,7 @@ import tomato.screen.layer.Background;
 import tomato.screen.layer.ColorLayer;
 import tomato.screen.layer.DescriptionLayer;
 import tomato.screen.layer.FadeOutLayer;
+import tomato.screen.layer.PauseLayer;
 import tomato.screen.layer.PlayerStatsLayer;
 
 public class GameScreen extends Screen implements LifeObserver {
@@ -29,9 +32,14 @@ public class GameScreen extends Screen implements LifeObserver {
 	private ArrayList<GameObject> gameObjects;
 	private PlayerStatsLayer statsLayer;
 	private FadeOutLayer fadeOutLayer;
+	private PauseLayer pauseLayer;
+	private boolean pausedByFocus, paused;
 
 	public GameScreen() {
 		statsLayer = new PlayerStatsLayer();
+		pausedByFocus = false;
+		paused = false;
+		pauseLayer = new PauseLayer();
 		level = LevelFactory.getLevelById(LevelFactory.level1);
 		cam = Camera.getInstance().init(Game.GAME_WIDTH, Game.GAME_HEIGHT);
 		level.init();
@@ -39,7 +47,6 @@ public class GameScreen extends Screen implements LifeObserver {
 		PhysicsEntity player = level.getPlayer();
 		player.addObserver((CooldownObserver) statsLayer);
 		player.addObserver(this);
-
 
 		gameObjects = new ArrayList<GameObject>();
 		gameObjects.add(new ColorLayer(new Color(0x7AA1FF)));
@@ -50,6 +57,28 @@ public class GameScreen extends Screen implements LifeObserver {
 		gameObjects.add(level);
 		gameObjects.add(statsLayer);
 		gameObjects.add(fadeOutLayer);
+		gameObjects.add(pauseLayer);
+		Game.getGameInstance().addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				if (!paused) {
+					pauseGame();
+
+					pausedByFocus = true;
+				}
+
+			}
+
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				if (paused && pausedByFocus) {
+					resumeGame();
+					pausedByFocus = false;
+				}
+
+			}
+		});
 	}
 
 	public void fillBackgounds(BufferedImage img, double factorX, double factorY) {
@@ -94,8 +123,13 @@ public class GameScreen extends Screen implements LifeObserver {
 			setScreen(new TitleScreen());
 			input.releaseAllKeys();
 		}
-		for (int i = 0; i < gameObjects.size(); i++) {
-			gameObjects.get(i).tick(input, delta);
+		if (input.buttons[Input.PAUSE] && !input.oldButtons[Input.PAUSE]) {
+			togglePause();
+		}
+		if (!paused) {
+			for (int i = 0; i < gameObjects.size(); i++) {
+				gameObjects.get(i).tick(input, delta);
+			}
 		}
 		if (life == 0) {
 			time += delta / Game.factor;
@@ -114,6 +148,21 @@ public class GameScreen extends Screen implements LifeObserver {
 	public void updateLife(int life) {
 		this.life = life;
 		statsLayer.updateLife(life);
+	}
+
+	public void pauseGame() {
+		paused = true;
+		pauseLayer.show(true);
+	}
+
+	public void resumeGame() {
+		paused = false;
+		pauseLayer.show(false);
+	}
+
+	public void togglePause() {
+		paused = !paused;
+		pauseLayer.show(paused);
 	}
 
 }
