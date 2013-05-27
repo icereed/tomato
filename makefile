@@ -4,8 +4,9 @@ DEST=bin/
 JFLAGS=-sourcepath $(SRC) -d $(DEST)
 JC=javac
 
-default: $(SRC)tomato/Game.java
+default:
+	mkdir -p $(DEST)
 	$(JC) $(JFLAGS) $(SRC)tomato/Game.java
 
 clean:
-	rm -r $(DEST)*
+	rm -r $(DEST)
