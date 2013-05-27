@@ -76,7 +76,11 @@ public abstract class PhysicsEntity extends AbstractEntity implements
 	@Override
 	public void afterTick(double delta) {
 		super.afterTick(delta);
-		tryMove((xa * delta) + tickHorizontalMovement, ya * delta);
+		if (onGround) {
+			tryMove((xa * delta) + tickHorizontalMovement, 0.0);
+		} else {
+			tryMove((xa * delta) + tickHorizontalMovement, ya * delta);
+		}
 		brake(delta);
 		tickHorizontalMovement = 0.0;
 	}
