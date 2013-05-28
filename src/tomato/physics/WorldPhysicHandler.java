@@ -70,7 +70,7 @@ public class WorldPhysicHandler {
 		/* Check, if the entity is about to leave the level... */
 
 		// ... on the bottom (entity dies then)
-		if (dy > 0 && e.getY() >= level.getHeight()) {
+		if ((e.getY() + e.getHeight()) >= level.getHeight()) {
 			return entityDies;
 		}
 		// ... on the left

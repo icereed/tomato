@@ -92,7 +92,7 @@ public class Tomato extends PhysicsEntity {
 	public void die() {
 		super.die();
 		new PixelExplosion(level, (int) (x + 0.5 * w), (int) (y + 0.5 * h),
-				300, 4.00D, 2000, new Color(0xFF0A0E));
+				250, 4.00D, 2000, new Color(0xFF0A0E));
 		Sound.die.play();
 	}
 

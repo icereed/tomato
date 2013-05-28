@@ -17,6 +17,7 @@ import tomato.entity.PhysicsEntity;
 import tomato.gfx.Art;
 import tomato.level.Level;
 import tomato.level.LevelFactory;
+import tomato.level.TestingLevelFactory;
 import tomato.screen.layer.Background;
 import tomato.screen.layer.ColorLayer;
 import tomato.screen.layer.DescriptionLayer;

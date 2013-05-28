@@ -22,13 +22,6 @@ public abstract class PhysicsEntity extends AbstractEntity implements
 	private ArrayList<EntityCommand> list;
 	protected Gun gun;
 	private double invulnerable;
-	/**
-	 * Is used to add the horizontal movement, which is invoked by boolean
-	 * move(int direction, double delta), to the general movement, which is
-	 * processed in tryMove().
-	 * 
-	 * @see public boolean move(int direction, double delta)
-	 */
 	private double tickHorizontalMovement = 0D;
 	private List<LifeObserver> lifeObservers;
 	private List<CooldownObserver> cooldownObservers;
@@ -118,7 +111,7 @@ public abstract class PhysicsEntity extends AbstractEntity implements
 				xa = xa + (brakeFriction * (onGround ? 5 : 1) * delta);
 			}
 			if (xa <= 1 && xa >= -1) {
-				xa = 0;
+				xa = 0.0;
 			}
 		}
 	}

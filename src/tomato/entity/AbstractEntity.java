@@ -128,7 +128,7 @@ public abstract class AbstractEntity implements Physicable {
 		byte ret = this.level.getPhysicHandler().checkCollision(level, this,
 				dx, dy);
 
-		if ((ret & WorldPhysicHandler.entityDies) != 0) {
+		if ((ret == WorldPhysicHandler.entityDies)) {
 			this.die();
 			return false;
 		}

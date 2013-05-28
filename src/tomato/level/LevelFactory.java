@@ -45,7 +45,7 @@ public class LevelFactory {
 		case LevelFactory.level2:
 
 			w = (Art.level2.getWidth() * Wall.TILE_SIZE);
-			h = Game.GAME_HEIGHT;
+			h = (Art.level2.getHeight() * Wall.TILE_SIZE);
 
 			ret = new Level(w, h);
 			LevelImageInterpreter.readLevel(Art.level2, ret);
@@ -56,7 +56,7 @@ public class LevelFactory {
 																	// wall
 																	// tiles
 			player = new EntityFactory(ret.getPhysicHandler())
-					.getLivingEntityById(AbstractEntity.PLAYER, 10, 10);
+					.getLivingEntityById(AbstractEntity.PLAYER, 10, 32*Wall.TILE_SIZE);
 			ret.setPlayer(player);
 			return ret;
 		default:

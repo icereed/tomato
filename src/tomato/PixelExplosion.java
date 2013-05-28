@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import tomato.entity.Pixel;
 import tomato.level.Level;
+import tomato.physics.WorldPhysicHandler;
 
 public class PixelExplosion {
 
@@ -12,7 +13,8 @@ public class PixelExplosion {
 		if (Game.PARTICLES) {
 
 			for (int i = 0; i < amount; i++) {
-				level.add(new Pixel(level.getPhysicHandler(), posX, posY,
+				WorldPhysicHandler physics = level.getPhysicHandler();
+				level.add(new Pixel(physics, posX, posY,
 						color, lifetime, (Math.random() - 0.5) * maxSpeed,
 						(Math.random() - 0.5) * maxSpeed));
 			}
