@@ -1,7 +1,5 @@
 package tomato.gfx;
 
-//PACKAGE EINFUEGEN!!!!
-// !_!_!_!_!_!_!_!
 
 import java.awt.Graphics;
 import java.awt.Image;
