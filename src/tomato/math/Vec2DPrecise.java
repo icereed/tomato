@@ -44,7 +44,7 @@ public class Vec2DPrecise implements IVec2D {
 		return to.substract(this);
 	}
 
-	public double pointProduct(IVec2D v) {
+	public double dotProduct(IVec2D v) {
 		return x * v.getX() + y * v.getY();
 	}
 
@@ -52,7 +52,7 @@ public class Vec2DPrecise implements IVec2D {
 		return new Vec2DPrecise(x - v.getX(), y - v.getY());
 	}
 
-	public IVec2D getUnitVector() {
+	public IVec2D getNormalized() {
 		double unitX, unitY;
 		double lenght = getLength();
 		unitX = x / lenght;
