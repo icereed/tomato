@@ -40,7 +40,7 @@ public class GameScreen extends Screen implements LifeObserver {
 		pausedByFocus = false;
 		paused = false;
 		pauseLayer = new PauseLayer();
-		level = LevelFactory.getLevelById(LevelFactory.level1);
+		level = LevelFactory.getLevelById(LevelFactory.level2);
 		cam = Camera.getInstance().init(Game.GAME_WIDTH, Game.GAME_HEIGHT);
 		level.init();
 
@@ -130,6 +130,8 @@ public class GameScreen extends Screen implements LifeObserver {
 			for (int i = 0; i < gameObjects.size(); i++) {
 				gameObjects.get(i).tick(input, delta);
 			}
+		} else {
+			pauseLayer.tick(input, delta);
 		}
 		if (life == 0) {
 			time += delta / Game.factor;

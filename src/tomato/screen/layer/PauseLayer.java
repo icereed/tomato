@@ -29,8 +29,8 @@ public class PauseLayer extends GameObject {
 			g.setColor(color);
 			g.fillRect(0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT);
 			g.setColor(Color.BLACK);
-			Art.drawString("PAUSED", g,
-					100 + (int) (Math.cos(time * 2) * 50),
+			Art.drawString("- PAUSED -", g,
+					135 + (int) (Math.cos(time * 2) * 50),
 					(Game.GAME_HEIGHT / 2 - 10)
 							+ (int) (Math.sin(time * 2) * 50));
 		}
@@ -39,7 +39,7 @@ public class PauseLayer extends GameObject {
 	@Override
 	public void tick(Input input, double delta) {
 		if (showing) {
-			time += delta / Game.factor;
+			time += delta*0.33 / Game.factor;
 		}
 	}
 
