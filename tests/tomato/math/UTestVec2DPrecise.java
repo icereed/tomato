@@ -55,7 +55,7 @@ public class UTestVec2DPrecise {
 		IVec2D b = new Vec2DPrecise(2.1, -4.1);
 		// 2.31 - 11,89
 		double expected = -9.58;
-		assertTrue("Point product is not correct. Given: " + a.pointProduct(b) + "|ÊExpected: " + expected, Math.abs(a.pointProduct(b) - expected) <= 0.001);
+		assertTrue("Point product is not correct. Given: " + a.dotProduct(b) + "|ÊExpected: " + expected, Math.abs(a.dotProduct(b) - expected) <= 0.001);
 	}
 
 	@Test
@@ -74,7 +74,7 @@ public class UTestVec2DPrecise {
 		IVec2D vector = new Vec2DPrecise(2.5, 3.1);
 		double length = vector.getLength();
 		
-		IVec2D unitVector = vector.getUnitVector();
+		IVec2D unitVector = vector.getNormalized();
 		assertTrue(unitVector.getX() == vector.getX()/length);
 		assertTrue(unitVector.getY() == vector.getY()/length);
 		

@@ -15,11 +15,11 @@ public interface IVec2D {
 
 	public IVec2D getConnectionVector(IVec2D b);
 
-	public double pointProduct(IVec2D v);
+	public double dotProduct(IVec2D v);
 
 	public IVec2D substract(IVec2D v);
 
-	public IVec2D getUnitVector();
+	public IVec2D getNormalized();
 
 	public double getX();
 

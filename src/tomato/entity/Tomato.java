@@ -76,7 +76,7 @@ public class Tomato extends PhysicsEntity {
 			IVec2D F = new Vec2DPrecise(from.x + 0.5D * from.w, from.y + 0.5 * from.h);
 
 			IVec2D PF = F.substract(P);
-			IVec2D unitVector = PF.getUnitVector();
+			IVec2D unitVector = PF.getNormalized();
 
 			xa -= walkspeed * unitVector.getX();
 

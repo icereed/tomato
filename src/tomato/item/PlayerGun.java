@@ -46,7 +46,7 @@ public class PlayerGun extends AbstractBulletGun {
 				- Bullet.BULLET_DIAMETER / 2, (mouseY / Game.getScreenScale())
 				+ cam.y - Bullet.BULLET_DIAMETER / 2);
 		IVec2D v_player_mouse = v_mouse.substract(v_player);
-		IVec2D unitvector = v_player_mouse.getUnitVector();
+		IVec2D unitvector = v_player_mouse.getNormalized();
 		shoot(unitvector);
 	}
 
